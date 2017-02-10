@@ -1,4 +1,4 @@
-package com.hackdtu.healthhistory;
+package com.hackdtu.healthhistory.activity;
 
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.hackdtu.healthhistory.R;
 
 public class MainActivity extends AppCompatActivity {
     private EditText adhaarNo, password;
