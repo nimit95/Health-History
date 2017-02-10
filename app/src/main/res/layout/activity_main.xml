@@ -6,19 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.hackdtu.healthhistory.MainActivity">
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/aadhar"
+        android:id="@+id/aadhar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@color/colorPrimary">
 
         <EditText
-            android:id="@+id/name"
+            android:id="@+id/aadhar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25"
             android:ems="1"
-            android:hint="Name"
-            android:inputType=""
+            android:hint="Adhaar Number"
+            android:inputType="number"
             android:maxLines="1"
             android:textColor="@color/text_color" />
     </android.support.design.widget.TextInputLayout>
