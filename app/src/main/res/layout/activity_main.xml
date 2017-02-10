@@ -5,10 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hackdtu.healthhistory.activity.MainActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        >
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:id="@+id/aadhar2"
-        android:layout_centerInParent="true"
+
         android:layout_height="wrap_content"
         android:textColorHint="@color/colorPrimary">
 
@@ -48,4 +53,5 @@
         android:text="Login"
         android:id="@+id/login"
         android:layout_height="wrap_content" />
+    </RelativeLayout>
 </RelativeLayout>
