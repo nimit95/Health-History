@@ -9,7 +9,7 @@ public class User {
     private String last_name;
     private String phone;
     private String blood_group;
-
+    //Status left
     public String getFirst_name() {
         return first_name;
     }
