@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hackdtu.healthhistory.MainActivity">
+    tools:context="com.hackdtu.healthhistory.activity.MainActivity">
     <android.support.design.widget.TextInputLayout
         android:id="@+id/aadhar2"
         android:layout_width="match_parent"
