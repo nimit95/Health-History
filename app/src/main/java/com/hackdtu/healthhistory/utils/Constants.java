@@ -6,5 +6,5 @@ package com.hackdtu.healthhistory.utils;
 public interface Constants {
 
     String TAG_SHARED_PREF = "sharedPreferences";
-
+    String DATA_URL="";
 }
