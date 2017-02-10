@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_upload"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.hackdtu.healthhistory.activity.UploadActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:id="@+id/image_to_be_uploaded"
+        android:layout_height="200dp" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/photo_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="1"
+            android:hint="Title"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/text_color" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorPrimary">
+
+        <EditText
+            android:id="@+id/photo_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="1"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:textColor="@color/text_color" />
+    </android.support.design.widget.TextInputLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <Button
+        android:layout_width="match_parent"
+        android:text="Upload"
+        android:id="@+id/upload_button"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_height="75dp" />
+    </RelativeLayout>
+</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

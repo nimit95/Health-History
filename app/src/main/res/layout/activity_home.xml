@@ -10,4 +10,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hackdtu.healthhistory.activity.HomeActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:id="@+id/upload_photo"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content" />
 </RelativeLayout>
