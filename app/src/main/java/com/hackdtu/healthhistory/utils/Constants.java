@@ -7,4 +7,5 @@ public interface Constants {
 
     String TAG_SHARED_PREF = "sharedPreferences";
     String DATA_URL="";
+    String AUTH_URL="";
 }

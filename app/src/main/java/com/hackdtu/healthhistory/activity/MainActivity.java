@@ -8,6 +8,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.network.NetworkCall;
+import com.hackdtu.healthhistory.utils.Constants;
+import com.hackdtu.healthhistory.utils.SuperPrefs;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private EditText adhaarNo, password;
@@ -28,15 +34,31 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public class GetResponse extends AsyncTask<Void, Void, Void> {
+    public class GetResponse extends AsyncTask<Object, Object, String> {
 
         @Override
-        protected Void doInBackground(Void... Void) {
+        protected String doInBackground(Object... Void) {
+            SuperPrefs superPrefs=new SuperPrefs(MainActivity.this);
+
+            JSONObject jsonObject=new JSONObject();
+            try {
+                jsonObject.put("adhaar_card",superPrefs.getString(""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            NetworkCall networkCall=new NetworkCall();
+            try {
+                String response=networkCall.post(Constants.AUTH_URL,jsonObject.toString());
+                return response;
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             return null;
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(String aVoid) {
             super.onPostExecute(aVoid);
         }
     }
