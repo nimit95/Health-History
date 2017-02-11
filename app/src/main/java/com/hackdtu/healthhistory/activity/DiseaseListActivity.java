@@ -74,6 +74,7 @@ public class DiseaseListActivity extends AppCompatActivity {
                 ListView listView=(ListView)findViewById(R.id.listView);
                 listView.setAdapter(adapter);
             }
+            Log.e("onPostExecute: ", jsonResponse);
         }
     }
 }

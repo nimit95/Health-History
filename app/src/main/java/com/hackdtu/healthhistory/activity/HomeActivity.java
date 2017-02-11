@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.model.Diseases;
 import com.hackdtu.healthhistory.model.DrawerHeader;
 import com.hackdtu.healthhistory.model.DrawerMenuItem;
 import com.hackdtu.healthhistory.model.HeadingView;
@@ -47,6 +48,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -189,13 +191,17 @@ public class HomeActivity extends AppCompatActivity {
             }
             else
             {
-                /*Gson gson=new GsonBuilder().create();
-                UserHistoryList userHistoryList=gson.fromJson(s,UserHistoryList.class);*/
+                List<Diseases> diseasesList=new ArrayList<>();
+                Gson gson=new GsonBuilder().create();
                 try {
-                    JSONObject jsonObject=new JSONObject(s);
-                    JSONArray jsonArray=jsonObject.getJSONArray("");
-                    List<UserHistory> userHistoryList;
-                    Log.e("onPostExecute: ",jsonArray.toString()+"hi" );
+                    JSONArray jsonArray=new JSONArray(s);
+
+
+                    for(int i=0;i<jsonArray.length();i++)
+                    {
+                        Diseases object=gson.fromJson(jsonArray.getString(i),Diseases.class);
+                        diseasesList.add(object);
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

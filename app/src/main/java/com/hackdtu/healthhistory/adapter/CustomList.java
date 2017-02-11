@@ -37,7 +37,7 @@ public class CustomList extends ArrayAdapter<Diseases> {
         TextView dis=(TextView)convertView.findViewById(R.id.disease_name);
         TextView dat=(TextView)convertView.findViewById(R.id.disease_date);
 
-        dis.setText(element.getDiseaseName());
+        dis.setText(element.getDisease());
         dat.setText(element.getTime());
         return convertView;
     }

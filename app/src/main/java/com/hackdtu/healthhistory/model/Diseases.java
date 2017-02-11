@@ -5,15 +5,15 @@ package com.hackdtu.healthhistory.model;
  */
 
 public class Diseases {
-    String diseaseName;
+    String Disease;
     String time;
 
-    public String getDiseaseName() {
-        return diseaseName;
+    public String getDisease() {
+        return Disease;
     }
 
-    public void setDiseaseName(String diseaseName) {
-        this.diseaseName = diseaseName;
+    public void setDisease(String disease) {
+        Disease = disease;
     }
 
     public String getTime() {
