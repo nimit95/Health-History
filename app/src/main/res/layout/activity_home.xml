@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+    </android.support.design.widget.AppBarLayout>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -11,9 +31,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hackdtu.healthhistory.activity.HomeActivity">
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_home"/>
+
     <com.mindorks.placeholderview.ExpandablePlaceHolderView
         android:id="@+id/expandableView"
         android:layout_width="match_parent"
@@ -40,3 +58,4 @@
             android:scrollbars="vertical"/>
     </FrameLayout>
 </android.support.v4.widget.DrawerLayout>
+    </android.support.design.widget.CoordinatorLayout>
