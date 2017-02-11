@@ -20,10 +20,12 @@ import com.hackdtu.healthhistory.network.NetworkCall3;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DiseaseListActivity extends AppCompatActivity {
 
@@ -59,6 +61,34 @@ public class DiseaseListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String jsonResponse) {
+            if(jsonResponse==null)
+            {
+                // Net not present
+                Log.e("onPostExecute: ","no response" );
+            }
+            else
+            {
+                ArrayList<Diseases> diseasesList=new ArrayList<>();
+                Gson gson=new GsonBuilder().create();
+                try {
+                    JSONArray jsonArray=new JSONArray(jsonResponse);
+
+
+                    for(int i=0;i<jsonArray.length();i++)
+                    {
+                        Diseases object=gson.fromJson(jsonArray.getString(i),Diseases.class);
+                        diseasesList.add(object);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.e("onPostExecute: ",jsonResponse );
+                CustomList adapter=new CustomList(DiseaseListActivity.this,diseasesList);
+                ListView listView=(ListView)findViewById(R.id.listView);
+                listView.setAdapter(adapter);
+            }
+
+            /*
             super.onPostExecute(jsonResponse);
             if(jsonResponse==null)
             {
@@ -74,7 +104,7 @@ public class DiseaseListActivity extends AppCompatActivity {
                 ListView listView=(ListView)findViewById(R.id.listView);
                 listView.setAdapter(adapter);
             }
-            Log.e("onPostExecute: ", jsonResponse);
+            Log.e("onPostExecute: ", jsonResponse);*/
         }
     }
 }

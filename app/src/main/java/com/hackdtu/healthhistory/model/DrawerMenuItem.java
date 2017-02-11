@@ -45,7 +45,7 @@ public class DrawerMenuItem {
     private void onResolved() {
         switch (mMenuPosition){
             case DRAWER_MENU_ITEM_PROFILE:
-                itemNameTxt.setText("Profile");
+                itemNameTxt.setText("Disease History");
                 itemNameTxt.setOnClickListener(new android.view.View.OnClickListener() {
                     @Override
                     public void onClick(android.view.View view) {
@@ -55,15 +55,15 @@ public class DrawerMenuItem {
                 itemIcon.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
                 break;
             case DRAWER_MENU_ITEM_REQUESTS:
-                itemNameTxt.setText("Requests");
+                itemNameTxt.setText("Sugar Level History");
                 itemIcon.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
             break;
             case DRAWER_MENU_ITEM_GROUPS:
-                itemNameTxt.setText("Groups");
+                itemNameTxt.setText("Blood Pressure History");
                 itemIcon.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
                 break;
             case DRAWER_MENU_ITEM_MESSAGE:
-                itemNameTxt.setText("Messages");
+                itemNameTxt.setText("Additional notes");
                 itemIcon.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
                 break;
         }
