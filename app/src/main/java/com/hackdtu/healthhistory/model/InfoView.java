@@ -51,6 +51,7 @@ public class InfoView {
         titleTxt.setText(userHistory.getTitle());
         captionTxt.setText(userHistory.getDescription());
         //timeTxt.setText(mInfo.getTime());
-        Picasso.with(mContext).load(userHistory.getHistory_pic()).into(imageView);
+       // Picasso.with(mContext).load(userHistory.getHistory_pic()).into(imageView);
+        Picasso.with(mContext).load(R.mipmap.ic_launcher).into(imageView);
     }
 }

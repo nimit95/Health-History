@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.model.HeadingView;
+import com.hackdtu.healthhistory.model.InfoView;
+import com.hackdtu.healthhistory.model.UserHistory;
 import com.hackdtu.healthhistory.model.UserHistoryList;
 import com.hackdtu.healthhistory.network.NetworkCall;
 import com.hackdtu.healthhistory.utils.Constants;
@@ -27,6 +30,7 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +42,7 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
     private int REQ_CAMERA_IMAGE=10;
     private FloatingActionButton uploadPhoto;
-
+    private ExpandablePlaceHolderView mExpandableView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +70,16 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);
             }
         });
+        mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
+        for(int i=0;i<10;i++) {
+            mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
+            for(int j=0;j<4;j++){
+                UserHistory userHistory = new UserHistory();
+                userHistory.setTitle("title"+j);
+                userHistory.setDescription("description"+j);
+                mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
+            }
+        }
     }
 
     @Override
