@@ -13,6 +13,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:id="@+id/image_to_be_uploaded"
+        android:scaleType="fitXY"
         android:layout_height="200dp" />
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"

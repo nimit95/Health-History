@@ -8,4 +8,6 @@ public interface Constants {
     String TAG_SHARED_PREF = "sharedPreferences";
     String DATA_URL="";
     String AUTH_URL="http://sahil99.pythonanywhere.com/api-auth/login/";
+    String UPLOAD_URL="http://sahil99.pythonanywhere.com/history/history/";
+    String DISEASE_LIST_URL="";
 }

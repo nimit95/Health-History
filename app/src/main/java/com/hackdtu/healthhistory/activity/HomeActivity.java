@@ -103,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
             //System.out.println(mImageCaptureUri);
             Intent intent=new Intent(HomeActivity.this,UploadActivity.class);
             intent.putExtra("path",tempUri.toString());
+            intent.putExtra("name",finalFile.getName());
             startActivity(intent);
         }
     }
