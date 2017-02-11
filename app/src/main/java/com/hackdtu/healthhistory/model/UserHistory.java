@@ -5,34 +5,46 @@ package com.hackdtu.healthhistory.model;
  */
 
 public class UserHistory {
+
+
     private String history_pic;
 
-    private String title;
+    private String user;
 
-    private String description;
+    private String time;
+    private String image_title;
     private String Disease;
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    private String blood_sugar_level;
     public String getHistory_pic() {
         return history_pic;
     }
 
     public void setHistory_pic(String history_pic) {
         this.history_pic = history_pic;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getImage_title() {
+        return image_title;
+    }
+
+    public void setImage_title(String image_title) {
+        this.image_title = image_title;
     }
 
     public String getDisease() {
@@ -42,4 +54,14 @@ public class UserHistory {
     public void setDisease(String disease) {
         Disease = disease;
     }
+
+    public String getBlood_sugar_level() {
+        return blood_sugar_level;
+    }
+
+    public void setBlood_sugar_level(String blood_sugar_level) {
+        this.blood_sugar_level = blood_sugar_level;
+    }
+
+
 }

@@ -22,10 +22,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.HomeActivity"
-            android:theme="@style/NoActionbar"/>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:theme="@style/NoActionbar" />
         <activity android:name=".activity.UploadActivity" />
-        <activity android:name=".activity.DiseaseListActivity"></activity>
+        <activity android:name=".activity.DiseaseListActivity" />
+        <activity android:name=".activity.ImageDisplay"></activity>
     </application>
 
 </manifest>

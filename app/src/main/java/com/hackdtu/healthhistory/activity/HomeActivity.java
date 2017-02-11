@@ -89,14 +89,13 @@ public class HomeActivity extends AppCompatActivity {
         mDrawer = (DrawerLayout)findViewById(R.id.drawerLayout);
         mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
-        this.setSupportActionBar(mToolbar);
-        mToolbar.setTitle("User Feeds");
-        mToolbar.setTitleTextColor(Color.WHITE);
         setupDrawer();
-
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle("User History");
+        mToolbar.setTitleTextColor(Color.WHITE);
         new ShowList().execute();
         mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
-        for(int i=0;i<10;i++) {
+        /*for(int i=0;i<10;i++) {
             mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
             for(int j=0;j<4;j++){
                 UserHistory userHistory = new UserHistory();
@@ -104,7 +103,7 @@ public class HomeActivity extends AppCompatActivity {
                 userHistory.setDescription("description"+j);
                 mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
             }
-        }
+        }*/
     }
     private void setupDrawer(){
         mDrawerView
@@ -195,7 +194,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             else
             {
-                List<Diseases> diseasesList=new ArrayList<>();
+                List<UserHistory> userHistoryLists=new ArrayList<>();
                 Gson gson=new GsonBuilder().create();
                 try {
                     JSONArray jsonArray=new JSONArray(s);
@@ -203,14 +202,29 @@ public class HomeActivity extends AppCompatActivity {
 
                     for(int i=0;i<jsonArray.length();i++)
                     {
-                        Diseases object=gson.fromJson(jsonArray.getString(i),Diseases.class);
-                        diseasesList.add(object);
+                        UserHistory object=gson.fromJson(jsonArray.getString(i),UserHistory.class);
+                        userHistoryLists.add(object);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                for(int i=0;i<4;i++) {
+                    if(i==0)
+                        mExpandableView.addView(new HeadingView(getApplicationContext(), "January, 2017"));
+                    if(i==1)
+                        mExpandableView.addView(new HeadingView(getApplicationContext(), "February, 2017"));
+                    if(i==2)
+                        mExpandableView.addView(new HeadingView(getApplicationContext(), "March, 2017"));
+                    if(i==3)
+                        mExpandableView.addView(new HeadingView(getApplicationContext(), "April, 2017"));
+                    for(int j=0;j<4;j++){
+                        UserHistory userHistory = userHistoryLists.get(j);
+                       // userHistory.setImage_title(userHistory.getImage_title());
+                        //userHistory.set("description"+j);
+                        mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
+                    }
                 Log.e("onPostExecute: ",s );
             }
         }
-    }
+    }}
 }

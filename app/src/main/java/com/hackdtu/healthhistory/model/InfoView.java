@@ -1,11 +1,17 @@
 package com.hackdtu.healthhistory.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.IDNA;
+import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.activity.ImageDisplay;
+import com.hackdtu.healthhistory.utils.Constants;
+import com.mindorks.placeholderview.annotations.Click;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
@@ -48,10 +54,17 @@ public class InfoView {
 
     @Resolve
     private void onResolved() {
-        titleTxt.setText(userHistory.getTitle());
-        captionTxt.setText(userHistory.getDescription());
+        titleTxt.setText(userHistory.getImage_title());
+        captionTxt.setText("Look at this");
         //timeTxt.setText(mInfo.getTime());
-       // Picasso.with(mContext).load(userHistory.getHistory_pic()).into(imageView);
-        Picasso.with(mContext).load(R.mipmap.ic_launcher).into(imageView);
+        Log.e("dwjn",userHistory.getHistory_pic());
+        Picasso.with(mContext).load(Constants.IMAGE_URL+userHistory.getHistory_pic()).into(imageView);
+        //Picasso.with(mContext).load(R.mipmap.ic_launcher).into(imageView);
+    }
+    @Click(R.id.ll)
+    private void onClick(){
+        Intent intent = new Intent(mContext, ImageDisplay.class);
+        intent.putExtra("path",Constants.IMAGE_URL+userHistory.getHistory_pic());
+        mContext.startActivity(intent);
     }
 }

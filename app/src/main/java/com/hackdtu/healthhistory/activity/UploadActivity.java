@@ -101,6 +101,7 @@ public class UploadActivity extends AppCompatActivity {
                     new MultipartUploadRequest(context, Constants.UPLOAD_URL)
                             // starting from 3.1+, you can also use content:// URI string instead of absolute file
                             .addFileToUpload(path, "history_pic").addParameter("image_title","bjbj")
+                            .setBasicAuth("sahil","test12345")
                             .setNotificationConfig(new UploadNotificationConfig())
                             .setBasicAuth("sahil","test12345")
                             .setMaxRetries(2)
