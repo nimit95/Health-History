@@ -1,8 +1,10 @@
 package com.hackdtu.healthhistory.activity;
 
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -27,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -37,6 +40,7 @@ import static com.hackdtu.healthhistory.utils.Constants.UPLOAD_URL;
 
 
 public class UploadActivity extends AppCompatActivity {
+    private static String TAG ="" ;
     private ImageView imageView;
     private EditText title,description;
     private Button uploadButton;
@@ -50,8 +54,10 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
+        TAG=this.getClass().getSimpleName();
         imageView=(ImageView)findViewById(R.id.image_to_be_uploaded);
 
+        jsonparsor=new Jsonparsor();
          path=getIntent().getStringExtra("path");
          name=getIntent().getStringExtra("name");
 
@@ -83,7 +89,8 @@ public class UploadActivity extends AppCompatActivity {
     }
     public void upload1(String path) {
         //if (!path.isEmpty()) {
-        Bitmap bm = BitmapFactory.decodeFile(path);
+        //Bitmap bm = BitmapFactory.decodeFile(path);
+        Bitmap bm=getBitmap(path);
         ByteArrayOutputStream bao = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 90, bao);
         byte[] ba = bao.toByteArray();
@@ -97,6 +104,71 @@ public class UploadActivity extends AppCompatActivity {
 
 
     }
+    private Bitmap getBitmap(String path) {
+
+        ContentResolver mContentResolver=getContentResolver();
+        Uri uri = Uri.parse(path);
+        InputStream in = null;
+        try {
+            final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
+            in = mContentResolver.openInputStream(uri);
+
+            // Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(in, null, o);
+            in.close();
+
+
+
+            int scale = 1;
+            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
+                    IMAGE_MAX_SIZE) {
+                scale++;
+            }
+           /* Log.d(TAG, "scale = " + scale + ", orig-width: " + o.outWidth + ",
+                    orig-height: " + o.outHeight);*/
+
+            Bitmap b = null;
+            in = mContentResolver.openInputStream(uri);
+            if (scale > 1) {
+                scale--;
+                // scale to max possible inSampleSize that still yields an image
+                // larger than target
+                o = new BitmapFactory.Options();
+                o.inSampleSize = scale;
+                b = BitmapFactory.decodeStream(in, null, o);
+
+                // resize to desired dimensions
+                int height = b.getHeight();
+                int width = b.getWidth();
+              /*  Log.d(TAG, "1th scale operation dimenions - width: " + width + ",
+                        height: " + height);*/
+
+                double y = Math.sqrt(IMAGE_MAX_SIZE
+                        / (((double) width) / height));
+                double x = (y / height) * width;
+
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
+                        (int) y, true);
+                b.recycle();
+                b = scaledBitmap;
+
+                System.gc();
+            } else {
+                b = BitmapFactory.decodeStream(in);
+            }
+            in.close();
+
+            Log.d(TAG, "bitmap size - width: " +b.getWidth() + ", height: " +
+                    b.getHeight());
+            return b;
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(),e);
+            return null;
+        }
+    }
+
     class demo extends AsyncTask<String, String, String> {
         ProgressDialog pd;
         HttpURLConnection conn = null;
@@ -177,16 +249,16 @@ public class UploadActivity extends AppCompatActivity {
             }
 
 
-            HashMap<String, String> param = new HashMap<>();
+          /*  HashMap<String, String> param = new HashMap<>();
 
             param.put("image_title",titleValue);
             //param.put("",descriptionValue);
 
             Log.d("Imagestaring", String.valueOf(ba1));
             json = jsonparsor.makeHttpRequest(UPLOAD_URL,"POST", param);
-            String res=json.opt("error_msg").toString();
+            String res=json.opt("error_msg").toString();*/
             Log.d("JsonArray", String.valueOf(json));
-            return res;
+            return "";
         }
     }
 }

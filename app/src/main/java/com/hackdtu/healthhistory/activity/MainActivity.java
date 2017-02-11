@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             Gson gson=new GsonBuilder().create();
             User user=gson.fromJson(jsonResponse,User.class);
             if(user.getStatus()!=null) {
-                if (user.getStatus().equalsIgnoreCase("Login Successfully")) {
+                if (user.getStatus().equalsIgnoreCase("Logi sucessfully")) {
                     superPrefs.setString("first_name", user.getFirst_name());
                     superPrefs.setString("last_name", user.getLast_name());
                     startActivity(new Intent(MainActivity.this, HomeActivity.class));

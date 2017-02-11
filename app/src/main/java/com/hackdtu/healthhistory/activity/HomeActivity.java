@@ -9,8 +9,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -18,6 +21,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.model.DrawerHeader;
+import com.hackdtu.healthhistory.model.DrawerMenuItem;
 import com.hackdtu.healthhistory.model.HeadingView;
 import com.hackdtu.healthhistory.model.InfoView;
 import com.hackdtu.healthhistory.model.UserHistory;
@@ -31,6 +36,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
+import com.mindorks.placeholderview.PlaceHolderView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +49,9 @@ public class HomeActivity extends AppCompatActivity {
     private int REQ_CAMERA_IMAGE=10;
     private FloatingActionButton uploadPhoto;
     private ExpandablePlaceHolderView mExpandableView;
+    private PlaceHolderView mDrawerView;
+    private DrawerLayout mDrawer;
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +79,10 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);
             }
         });
+        mDrawer = (DrawerLayout)findViewById(R.id.drawerLayout);
+        mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
+        mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        setupDrawer();
         mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
         for(int i=0;i<10;i++) {
             mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
@@ -80,6 +93,29 @@ public class HomeActivity extends AppCompatActivity {
                 mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
             }
         }
+    }
+    private void setupDrawer(){
+        mDrawerView
+                .addView(new DrawerHeader())
+                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_PROFILE))
+                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_REQUESTS))
+                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_MESSAGE))
+                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_GROUPS));
+
+
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_drawer, R.string.close_drawer){
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
+        mDrawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 
     @Override
@@ -105,6 +141,7 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("path",tempUri.toString());
             intent.putExtra("name",finalFile.getName());
             startActivity(intent);
+            
         }
     }
 
