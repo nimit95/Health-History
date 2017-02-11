@@ -2,6 +2,7 @@ package com.hackdtu.healthhistory.activity;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -19,7 +20,13 @@ import android.widget.Toast;
 
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.network.Jsonparsor;
+import com.hackdtu.healthhistory.utils.Constants;
 import com.squareup.picasso.Picasso;
+
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
+import net.gotev.uploadservice.UploadService;
+import net.gotev.uploadservice.okhttp.OkHttpStack;
 
 import org.json.JSONObject;
 
@@ -53,7 +60,7 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
-
+        UploadService.HTTP_STACK = new OkHttpStack();
         TAG=this.getClass().getSimpleName();
         imageView=(ImageView)findViewById(R.id.image_to_be_uploaded);
 
@@ -75,7 +82,8 @@ public class UploadActivity extends AppCompatActivity {
                     // Upload start
                     titleValue=title.getText().toString();
                     descriptionValue=description.getText().toString();
-                    upload1(path);
+                    //upload1(path);
+                    uploadMultipart(getApplicationContext());
                 }
                 else
                 {
@@ -86,6 +94,20 @@ public class UploadActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void uploadMultipart(final Context context) {
+        try {
+            String uploadId =
+                    new MultipartUploadRequest(context, Constants.UPLOAD_URL)
+                            // starting from 3.1+, you can also use content:// URI string instead of absolute file
+                            .addFileToUpload(path, "history_pic").addParameter("image_title","bjbj")
+                            .setNotificationConfig(new UploadNotificationConfig())
+                            .setBasicAuth("sahil","test12345")
+                            .setMaxRetries(2)
+                            .startUpload();
+        } catch (Exception exc) {
+            Log.e("AndroidUploadService", exc.getMessage(), exc);
+        }
     }
     public void upload1(String path) {
         //if (!path.isEmpty()) {

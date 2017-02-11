@@ -14,14 +14,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.DrawerHeader;
 import com.hackdtu.healthhistory.model.DrawerMenuItem;
@@ -30,7 +28,6 @@ import com.hackdtu.healthhistory.model.InfoView;
 import com.hackdtu.healthhistory.model.UserHistory;
 import com.hackdtu.healthhistory.model.UserHistoryList;
 import com.hackdtu.healthhistory.network.NetworkCall;
-import com.hackdtu.healthhistory.network.NetworkCall2;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 import com.karumi.dexter.Dexter;
@@ -41,7 +38,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 import com.mindorks.placeholderview.PlaceHolderView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,8 +83,6 @@ public class HomeActivity extends AppCompatActivity {
         mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setupDrawer();
-
-        new ShowList().execute();
         mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
         for(int i=0;i<10;i++) {
             mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
@@ -147,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("path",tempUri.toString());
             intent.putExtra("name",finalFile.getName());
             startActivity(intent);
-
+            
         }
     }
 
@@ -168,9 +162,17 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Object... objects) {
-            NetworkCall2 networkCall=new NetworkCall2();
+            SuperPrefs superPrefs=new SuperPrefs(HomeActivity.this);
+
+            JSONObject jsonObject=new JSONObject();
             try {
-                String response=networkCall.run(Constants.DATA_URL);
+                jsonObject.put("adhaar_card",superPrefs.getString(""));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            NetworkCall networkCall=new NetworkCall();
+            try {
+                String response=networkCall.post(Constants.DATA_URL,jsonObject.toString());
                 return response;
             }catch (Exception e)
             {
@@ -185,21 +187,11 @@ public class HomeActivity extends AppCompatActivity {
             if(s==null)
             {
                 // Net not present
-                Log.e("onPostExecute: ","no response" );
             }
             else
             {
-                /*Gson gson=new GsonBuilder().create();
-                UserHistoryList userHistoryList=gson.fromJson(s,UserHistoryList.class);*/
-                try {
-                    JSONObject jsonObject=new JSONObject(s);
-                    JSONArray jsonArray=jsonObject.getJSONArray("");
-                    List<UserHistory> userHistoryList;
-                    Log.e("onPostExecute: ",jsonArray.toString()+"hi" );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.e("onPostExecute: ",s );
+                Gson gson=new GsonBuilder().create();
+                UserHistoryList userHistoryList=gson.fromJson(s,UserHistoryList.class);
             }
         }
     }

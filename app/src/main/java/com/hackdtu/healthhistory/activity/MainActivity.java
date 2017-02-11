@@ -12,11 +12,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.hackdtu.healthhistory.BuildConfig;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.User;
 import com.hackdtu.healthhistory.network.NetworkCall;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
+
+import net.gotev.uploadservice.UploadService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         superPrefs=new SuperPrefs(MainActivity.this);
         if(superPrefs.stringExists("adhaar_card")){
             startActivity(new Intent(MainActivity.this, HomeActivity.class));

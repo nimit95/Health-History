@@ -42,7 +42,7 @@ public class DiseaseListActivity extends AppCompatActivity {
 
             JSONObject jsonObject=new JSONObject();
             try {
-                jsonObject.put("adhaar_card",superPrefs.getString(""));
+                jsonObject.put("adhaar_card",superPrefs.getString("adhaar_card"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

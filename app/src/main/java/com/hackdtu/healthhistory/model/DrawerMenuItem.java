@@ -46,6 +46,12 @@ public class DrawerMenuItem {
         switch (mMenuPosition){
             case DRAWER_MENU_ITEM_PROFILE:
                 itemNameTxt.setText("Profile");
+                itemNameTxt.setOnClickListener(new android.view.View.OnClickListener() {
+                    @Override
+                    public void onClick(android.view.View view) {
+                        mContext.startActivity(new Intent(mContext, DiseaseListActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
                 itemIcon.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.ic_launcher));
                 break;
             case DRAWER_MENU_ITEM_REQUESTS:
@@ -67,18 +73,18 @@ public class DrawerMenuItem {
     private void onMenuItemClick(){
         switch (mMenuPosition){
             case DRAWER_MENU_ITEM_PROFILE:
-                Toast.makeText(mContext, "Profile", Toast.LENGTH_SHORT).show();
-                mContext.startActivity(new Intent(mContext, DiseaseListActivity.class));
+               // Toast.makeText(mContext, "Profile", Toast.LENGTH_SHORT).show();
+
                 if(mCallBack != null)
                     //mContext.startActivity(new Intent(mContext, DiseaseListActivity.class));
                     mCallBack.onProfileMenuSelected();
                 break;
             case DRAWER_MENU_ITEM_REQUESTS:
-                Toast.makeText(mContext, "Requests", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(mContext, "Requests", Toast.LENGTH_SHORT).show();
                 if(mCallBack != null)mCallBack.onRequestMenuSelected();
                 break;
             case DRAWER_MENU_ITEM_GROUPS:
-                Toast.makeText(mContext, "Groups", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(mContext, "Groups", Toast.LENGTH_SHORT).show();
                 if(mCallBack != null)mCallBack.onGroupsMenuSelected();
                 break;
             case DRAWER_MENU_ITEM_MESSAGE:
