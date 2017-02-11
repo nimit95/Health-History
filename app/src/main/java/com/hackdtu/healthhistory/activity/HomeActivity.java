@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -88,6 +89,9 @@ public class HomeActivity extends AppCompatActivity {
         mDrawer = (DrawerLayout)findViewById(R.id.drawerLayout);
         mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
+        this.setSupportActionBar(mToolbar);
+        mToolbar.setTitle("User Feeds");
+        mToolbar.setTitleTextColor(Color.WHITE);
         setupDrawer();
 
         new ShowList().execute();
