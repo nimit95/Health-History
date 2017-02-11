@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(adhaarNo.getText().toString().length()==12 && password.getText().toString().length()!=0) {
                     superPrefs.setString("adhaar_card", adhaarNo.getText().toString());
-                    new GetResponse().execute();
+                    String[] s={password.getText().toString(), adhaarNo.getText().toString()};
+                    new GetResponse().execute(s);
                 }
                 else
                     Toast.makeText(getApplicationContext(), "Enter Valid Data", Toast.LENGTH_SHORT).show();
@@ -49,21 +51,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public class GetResponse extends AsyncTask<Object, Object, String> {
+    public class GetResponse extends AsyncTask<String, Object, String> {
 
         @Override
-        protected String doInBackground(Object... Void) {
+        protected String doInBackground(String[] password) {
 
 
             JSONObject jsonObject=new JSONObject();
             try {
                 jsonObject.put("adhaar_card",superPrefs.getString("adhaar_card"));
+                jsonObject.put("password", password[0]);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             NetworkCall networkCall=new NetworkCall();
             try {
                 String response=networkCall.post(Constants.AUTH_URL,jsonObject.toString());
+                Log.e("yo", response);
                 return response;
             }catch (Exception e)
             {
@@ -77,10 +81,18 @@ public class MainActivity extends AppCompatActivity {
             //super.onPostExecute(jsonResponse);
             Gson gson=new GsonBuilder().create();
             User user=gson.fromJson(jsonResponse,User.class);
-            superPrefs.setString("first_name",user.getFirst_name());
-            superPrefs.setString("last_name", user.getLast_name());
-            startActivity(new Intent(MainActivity.this, HomeActivity.class));
-            finish();
+            if(user.getStatus()!=null) {
+                if (user.getStatus().equalsIgnoreCase("Login Successfully")) {
+                    superPrefs.setString("first_name", user.getFirst_name());
+                    superPrefs.setString("last_name", user.getLast_name());
+                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                    finish();
+                }
+                else
+                    Toast.makeText(getApplicationContext(), "Adhaar/Password Wrong", Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getApplicationContext(), "Adhaar/Password Wrong", Toast.LENGTH_SHORT).show();
         }
     }
 }

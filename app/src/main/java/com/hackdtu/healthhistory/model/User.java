@@ -9,6 +9,7 @@ public class User {
     private String last_name;
     private String phone;
     private String blood_group;
+    private String status;
     //Status left
     public String getFirst_name() {
         return first_name;
@@ -40,5 +41,13 @@ public class User {
 
     public void setBlood_group(String blood_group) {
         this.blood_group = blood_group;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
