@@ -1,11 +1,13 @@
 package com.hackdtu.healthhistory.model;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.activity.DiseaseListActivity;
 import com.mindorks.placeholderview.annotations.Click;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
@@ -66,6 +68,7 @@ public class DrawerMenuItem {
         switch (mMenuPosition){
             case DRAWER_MENU_ITEM_PROFILE:
                 Toast.makeText(mContext, "Profile", Toast.LENGTH_SHORT).show();
+                mContext.startActivity(new Intent(mContext, DiseaseListActivity.class));
                 if(mCallBack != null)mCallBack.onProfileMenuSelected();
                 break;
             case DRAWER_MENU_ITEM_REQUESTS:
