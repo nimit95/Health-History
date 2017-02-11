@@ -69,7 +69,9 @@ public class DrawerMenuItem {
             case DRAWER_MENU_ITEM_PROFILE:
                 Toast.makeText(mContext, "Profile", Toast.LENGTH_SHORT).show();
                 mContext.startActivity(new Intent(mContext, DiseaseListActivity.class));
-                if(mCallBack != null)mCallBack.onProfileMenuSelected();
+                if(mCallBack != null)
+                    //mContext.startActivity(new Intent(mContext, DiseaseListActivity.class));
+                    mCallBack.onProfileMenuSelected();
                 break;
             case DRAWER_MENU_ITEM_REQUESTS:
                 Toast.makeText(mContext, "Requests", Toast.LENGTH_SHORT).show();

@@ -68,7 +68,7 @@ public class DiseaseListActivity extends AppCompatActivity {
                 Gson gson=new GsonBuilder().create();
                 DiseasesHistory diseasesHistory=gson.fromJson(jsonResponse,DiseasesHistory.class);
                 ArrayList<Diseases> diseasesArrayList=new ArrayList<>(diseasesHistory.getDiseasesList().size());
-                CustomList adapter=new CustomList(DiseaseListActivity.this,diseasesHistory.getDiseasesList());
+                CustomList adapter=new CustomList(DiseaseListActivity.this,diseasesArrayList);
                 ListView listView=(ListView)findViewById(R.id.listView);
                 listView.setAdapter(adapter);
             }
