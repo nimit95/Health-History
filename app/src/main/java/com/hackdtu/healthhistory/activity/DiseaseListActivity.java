@@ -15,6 +15,8 @@ import com.hackdtu.healthhistory.model.DiseasesHistory;
 import com.hackdtu.healthhistory.model.User;
 import com.hackdtu.healthhistory.model.UserHistoryList;
 import com.hackdtu.healthhistory.network.NetworkCall;
+import com.hackdtu.healthhistory.network.NetworkCall2;
+import com.hackdtu.healthhistory.network.NetworkCall3;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
@@ -44,9 +46,9 @@ public class DiseaseListActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            NetworkCall networkCall=new NetworkCall();
+            NetworkCall2 networkCall=new NetworkCall2();
             try {
-                String response=networkCall.post(Constants.DISEASE_LIST_URL,jsonObject.toString());
+                String response=networkCall.run(Constants.DISEASE_LIST_URL);
                 return response;
             }catch (Exception e)
             {

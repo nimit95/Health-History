@@ -12,20 +12,30 @@ import okhttp3.Response;
  * Created by dell on 2/11/2017.
  */
 
-public class NetworkCall {
+public class NetworkCall3 {
+    /*
+public static final MediaType JSON
+     = MediaType.parse("application/json; charset=utf-8");
 
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
 
     OkHttpClient client = new OkHttpClient();
 
     public String post(String url, String json) throws IOException {
         RequestBody body = RequestBody.create(JSON, json);
-        Request request = new Request.Builder()
+        //String credential = Credentials.basic("sahil", "test12345");
+        Request request = new Request.Builder()//.header("Authorization", credential)
                 .url(url)
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
+
         return response.body().string();
     }
+    private int responseCount(Response response) {
+        int result = 1;
+        while ((response = response.priorResponse()) != null) {
+            result++;
+        }
+        return result;
+    }*/
 }
