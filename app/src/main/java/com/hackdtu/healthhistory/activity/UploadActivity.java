@@ -23,8 +23,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hackdtu.healthhistory.R;
@@ -67,12 +70,15 @@ public class UploadActivity extends AppCompatActivity {
     Jsonparsor jsonparsor;
     JSONObject json;
     private String titleValue,descriptionValue;
+
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
         mStorageRef= FirebaseStorage.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         UploadService.HTTP_STACK = new OkHttpStack();
         TAG=this.getClass().getSimpleName();
@@ -121,11 +127,26 @@ public class UploadActivity extends AppCompatActivity {
         Uri uri=Uri.parse(path);
 
         progressStart();
+
+        /*
+        StorageMetadata metadata=new StorageMetadata.Builder()
+                .setContentType("image/jpg")
+                .build();
+        */
+
         StorageReference riversRef=mStorageRef.child(uid+"images/"+titleValue);
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri url=taskSnapshot.getDownloadUrl();
+
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        Log.e(TAG, "onSuccess: "+url.toString() );
+                        //DatabaseReference mRef = mDatabase.getReference("imageUrl");
+                        //mRef.setValue(url);
+                        mDatabase.child("imageUrl").setValue(url);
+
                         pd.dismiss();
                         //and displaying a success toast
                         Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
