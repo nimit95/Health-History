@@ -18,7 +18,7 @@
             android:textColorHint="@color/colorPrimary">
 
             <EditText
-                android:id="@+id/aadhar"
+                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="1"
@@ -53,7 +53,7 @@
             android:text="Sign up"
             android:textColor="@color/white"
             android:background="@drawable/mybutton"
-            android:id="@+id/login"
+            android:id="@+id/sign_up"
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
