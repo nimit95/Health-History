@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "130551244071",
+    "firebase_url": "https://healthhistory-459fe.firebaseio.com",
+    "project_id": "healthhistory-459fe",
+    "storage_bucket": "healthhistory-459fe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:130551244071:android:6fb47070dc9980e3",
+        "android_client_info": {
+          "package_name": "com.hackdtu.healthhistory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "130551244071-d7747v7em64r1j41c3l30id3a7io0cgd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hackdtu.healthhistory",
+            "certificate_hash": "2c4d946461b3d0299aa7b0381cf274c550806cde"
+          }
+        },
+        {
+          "client_id": "130551244071-4gi6u0cbuoi3oi5fidbqlv3gf0cha3pl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsp16oHzqfBD9Tr2MIupBTaPxkLclGeHY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "130551244071-4gi6u0cbuoi3oi5fidbqlv3gf0cha3pl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
