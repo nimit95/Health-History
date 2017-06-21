@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Build;
+//import android.support.annotation.IntDef;
 import android.support.annotation.IntDef;
 import android.util.AttributeSet;
 import android.view.View;
@@ -23,7 +24,7 @@ public class AVLoadingIndicatorView extends View {
 
 
 
-    @IntDef(flag = true,
+   @IntDef(flag = true,
             value = {
                     BallPulse,
 

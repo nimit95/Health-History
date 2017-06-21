@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
     android:paddingRight="20dp"
+    android:id="@+id/ll"
     android:paddingTop="10dp"
     android:paddingBottom="20dp"
     android:gravity="left"
