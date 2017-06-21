@@ -1,5 +1,6 @@
 package com.hackdtu.healthhistory.activity;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -55,7 +56,10 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(SignUpActivity.this, "Wrong Email",
                                     Toast.LENGTH_SHORT).show();
                         }
-
+                        else {
+                            startActivity(new Intent(SignUpActivity.this, HomeActivity.class));
+                            finish();
+                        }
                         // ...
                     }
                 });
