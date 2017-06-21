@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -109,10 +111,17 @@ public class UploadActivity extends AppCompatActivity {
     }
     void upload()
     {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Toast.makeText(this,"Please Check your connection",Toast.LENGTH_SHORT);
+            return;
+        }
+
+        String uid = user.getUid();
         Uri uri=Uri.parse(path);
 
         progressStart();
-        StorageReference riversRef=mStorageRef.child("images/"+name);
+        StorageReference riversRef=mStorageRef.child(uid+"images/"+titleValue);
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -120,6 +129,7 @@ public class UploadActivity extends AppCompatActivity {
                         pd.dismiss();
                         //and displaying a success toast
                         Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
