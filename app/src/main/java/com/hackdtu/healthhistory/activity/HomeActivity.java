@@ -93,7 +93,7 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         mToolbar.setTitle("User History");
         mToolbar.setTitleTextColor(Color.WHITE);
-        new ShowList().execute();
+        //new ShowList().execute();
         mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
         /*for(int i=0;i<10;i++) {
             mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));

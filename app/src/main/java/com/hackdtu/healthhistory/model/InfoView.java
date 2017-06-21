@@ -64,7 +64,9 @@ public class InfoView {
     @Click(R.id.ll)
     private void onClick(){
         Intent intent = new Intent(mContext, ImageDisplay.class);
+        Log.e("k","mk");
         intent.putExtra("path",Constants.IMAGE_URL+userHistory.getHistory_pic());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
 }

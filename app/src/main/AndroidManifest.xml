@@ -27,7 +27,8 @@
             android:theme="@style/NoActionbar" />
         <activity android:name=".activity.UploadActivity" />
         <activity android:name=".activity.DiseaseListActivity" />
-        <activity android:name=".activity.ImageDisplay"></activity>
+        <activity android:name=".activity.ImageDisplay" />
+        <activity android:name=".activity.SignUpActivity"></activity>
     </application>
 
 </manifest>
