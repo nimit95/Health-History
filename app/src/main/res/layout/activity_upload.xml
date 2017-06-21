@@ -58,6 +58,7 @@
         android:id="@+id/upload_button"
         android:layout_margin="5dp"
         android:gravity="center"
+        android:background="@color/colorPrimaryDark"
         android:layout_alignParentBottom="true"
         android:layout_height="75dp" />
     </RelativeLayout>

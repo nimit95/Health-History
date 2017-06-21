@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -18,6 +19,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.network.Jsonparsor;
 import com.hackdtu.healthhistory.utils.Constants;
@@ -47,6 +54,8 @@ import static com.hackdtu.healthhistory.utils.Constants.UPLOAD_URL;
 
 
 public class UploadActivity extends AppCompatActivity {
+    private ProgressDialog pd;
+    private StorageReference mStorageRef;
     private static String TAG ="" ;
     private ImageView imageView;
     private EditText title,description;
@@ -60,6 +69,9 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
+
+        mStorageRef= FirebaseStorage.getInstance().getReference();
+
         UploadService.HTTP_STACK = new OkHttpStack();
         TAG=this.getClass().getSimpleName();
         imageView=(ImageView)findViewById(R.id.image_to_be_uploaded);
@@ -82,7 +94,8 @@ public class UploadActivity extends AppCompatActivity {
                     // Upload start
                     titleValue=title.getText().toString();
                     descriptionValue=description.getText().toString();
-                    new demo().execute();
+                    //new demo().execute();
+                    upload();
                 }
                 else
                 {
@@ -94,92 +107,44 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
     }
+    void upload()
+    {
+        Uri uri=Uri.parse(path);
 
-    private Bitmap getBitmap(String path) {
+        progressStart();
+        StorageReference riversRef=mStorageRef.child("images/"+name);
+        riversRef.putFile(uri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        pd.dismiss();
+                        //and displaying a success toast
+                        Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        pd.dismiss();
+                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        //calculating progress percentage
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-        ContentResolver mContentResolver=getContentResolver();
-        Uri uri = Uri.parse(path);
-        InputStream in = null;
-        try {
-            final int IMAGE_MAX_SIZE = 1200000; // 1.2MP
-            in = mContentResolver.openInputStream(uri);
-
-            // Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(in, null, o);
-            in.close();
-
-
-
-            int scale = 1;
-            while ((o.outWidth * o.outHeight) * (1 / Math.pow(scale, 2)) >
-                    IMAGE_MAX_SIZE) {
-                scale++;
-            }
-           /* Log.d(TAG, "scale = " + scale + ", orig-width: " + o.outWidth + ",
-                    orig-height: " + o.outHeight);*/
-
-            Bitmap b = null;
-            in = mContentResolver.openInputStream(uri);
-            if (scale > 1) {
-                scale--;
-                // scale to max possible inSampleSize that still yields an image
-                // larger than target
-                o = new BitmapFactory.Options();
-                o.inSampleSize = scale;
-                b = BitmapFactory.decodeStream(in, null, o);
-
-                // resize to desired dimensions
-                int height = b.getHeight();
-                int width = b.getWidth();
-              /*  Log.d(TAG, "1th scale operation dimenions - width: " + width + ",
-                        height: " + height);*/
-
-                double y = Math.sqrt(IMAGE_MAX_SIZE
-                        / (((double) width) / height));
-                double x = (y / height) * width;
-
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(b, (int) x,
-                        (int) y, true);
-                b.recycle();
-                b = scaledBitmap;
-
-                System.gc();
-            } else {
-                b = BitmapFactory.decodeStream(in);
-            }
-            in.close();
-
-            Log.d(TAG, "bitmap size - width: " +b.getWidth() + ", height: " +
-                    b.getHeight());
-            return b;
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(),e);
-            return null;
-        }
+                        //displaying percentage in progress dialog
+                        pd.setMessage("Uploaded " + ((int) progress) + "%...");
+                    }
+                });
     }
-
-    class demo extends AsyncTask<Void, Void, Void> {
-        ProgressDialog pd;
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            pd.dismiss();
-        }
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Bitmap image=getBitmap(path);
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
+        void progressStart() {
             pd = new ProgressDialog(UploadActivity.this);
             pd.setMessage("Upload Image Please Wait...");
             pd.setCancelable(false);
             pd.show();
-            super.onPreExecute();
         }
     }
-}
+
