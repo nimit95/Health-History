@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:ems="1"
             android:hint="Email id"
-            android:inputType="number"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:textColor="@color/text_color" />
     </android.support.design.widget.TextInputLayout>
