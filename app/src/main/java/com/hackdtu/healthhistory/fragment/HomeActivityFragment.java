@@ -16,7 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.HeadingView;
-import com.hackdtu.healthhistory.model.Image;
+import com.hackdtu.healthhistory.model.ImagePojo;
 import com.hackdtu.healthhistory.model.InfoView;
 import com.hackdtu.healthhistory.model.UserHistory;
 import com.hackdtu.healthhistory.utils.Constants;
@@ -48,7 +48,7 @@ public class HomeActivityFragment extends Fragment {
     private DatabaseReference databaseReference;
     private HashSet<String> typesOfImagePresent;
     private SuperPrefs superPrefs;
-    private ArrayList<Image> xRay,mRI,doctPresciption,ultrasound,testReport,others;
+    private ArrayList<ImagePojo> xRay,mRI,doctPresciption,ultrasound,testReport,others;
     public HomeActivityFragment() {
         // Required empty public constructor
     }
@@ -113,7 +113,7 @@ public class HomeActivityFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for(DataSnapshot data: dataSnapshot.getChildren()){
-                    Image image = data.getValue(Image.class);
+                    ImagePojo image = data.getValue(ImagePojo.class);
 
                     typesOfImagePresent.add(image.getImgType());
                     int imgType = Integer.parseInt(image.getImgType());
@@ -149,7 +149,7 @@ public class HomeActivityFragment extends Fragment {
 
     }
 
-    private void addChildViewsToView(int pos,ArrayList<Image> arr) {
+    private void addChildViewsToView(int pos,ArrayList<ImagePojo> arr) {
 
         for(int i=0; i<arr.size();i++){
             mExpandableView.addChildView(pos,

@@ -44,10 +44,10 @@ public class InfoView {
     @View(R.id.imageView)
     private ImageView imageView;
 
-    private Image image;
+    private ImagePojo image;
     private Context mContext;
 
-    public InfoView(Context context, Image image) {
+    public InfoView(Context context, ImagePojo image) {
         mContext = context;
         this.image = image;
     }
