@@ -10,6 +10,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
 import com.hackdtu.healthhistory.model.Diseases;
 import com.hackdtu.healthhistory.model.DrawerHeader;
 import com.hackdtu.healthhistory.model.DrawerMenuItem;
@@ -45,6 +49,12 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 import com.mindorks.placeholderview.PlaceHolderView;
 
@@ -60,10 +70,10 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
     private int REQ_CAMERA_IMAGE=10;
     private FloatingActionButton uploadPhoto;
-    private ExpandablePlaceHolderView mExpandableView;
-    private PlaceHolderView mDrawerView;
-    private DrawerLayout mDrawer;
-    private Toolbar mToolbar;
+    private Toolbar topToolBar;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,58 +92,13 @@ public class HomeActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Permission Denied\n" + permissions.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }).check();
-        uploadPhoto=(FloatingActionButton)findViewById(R.id.upload_photo);
-        uploadPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, REQ_CAMERA_IMAGE);
-            }
-        });
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("imageUrl");
+        initializeView();
 
-        mDrawer = (DrawerLayout)findViewById(R.id.drawerLayout);
-        mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
-        mToolbar = (Toolbar)findViewById(R.id.toolbar);
         setupDrawer();
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitle("User History");
-        mToolbar.setTitleTextColor(Color.WHITE);
-        //new ShowList().execute();
-        mExpandableView = (ExpandablePlaceHolderView)findViewById(R.id.expandableView);
-        /*for(int i=0;i<10;i++) {
-            mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
-            for(int j=0;j<4;j++){
-                UserHistory userHistory = new UserHistory();
-                userHistory.setTitle("title"+j);
-                userHistory.setDescription("description"+j);
-                mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
-            }
-        }*/
-        for(int i=0;i<4;i++) {
-            if (i == 0)
-                mExpandableView.addView(new HeadingView(getApplicationContext(), "June, 2017"));
-            if (i == 1)
-                mExpandableView.addView(new HeadingView(getApplicationContext(), "May, 2017"));
-            if (i == 2)
-                mExpandableView.addView(new HeadingView(getApplicationContext(), "March, 2017"));
-            if (i == 3)
-                mExpandableView.addView(new HeadingView(getApplicationContext(), "January, 2017"));
-        }
-        ArrayList<UserHistory> userHistoryList = new ArrayList<>();
 
-        for(int j=0;j<4;j++){
-            userHistoryList.add(new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
-            , "lalu", "21 june 2017", "Blood test Report", "Detailed report awaited","102"));
-            UserHistory userHistory = userHistoryList.get(j);
-           // mExpandableView.addView();
-        }
-        userHistoryList.add(1,new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
-                , "Piyush", "20 june 2017", "Chest X Ray", "Little Congestion in chest","102"));
-        mExpandableView.addChildView(0,new InfoView(getApplicationContext(), userHistoryList.get(0)));
-        mExpandableView.addChildView(0, new InfoView(getApplicationContext(), userHistoryList.get(1)));
+        attachFragment();
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -151,29 +116,90 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void attachFragment() {
+        Fragment fragment = new HomeActivityFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.add(R.id.fl_container,fragment);
+        transaction.commit();
+    }
+
+    private void initializeView() {
+        uploadPhoto=(FloatingActionButton)findViewById(R.id.upload_photo);
+        uploadPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, REQ_CAMERA_IMAGE);
+            }
+        });
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("imageUrl");
+
+
+        topToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topToolBar);
+        topToolBar.setTitle("User History");
+        topToolBar.setTitleTextColor(Color.WHITE);
+    }
+
     private void setupDrawer(){
-        mDrawerView
-                .addView(new DrawerHeader())
-                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_PROFILE))
-                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_REQUESTS))
-                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_MESSAGE))
-                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_GROUPS));
 
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.mipmap.ic_launcher).build();
 
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, mDrawer, mToolbar, R.string.open_drawer, R.string.close_drawer){
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-            }
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-        };
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.disease_history);
+                //.withIcon(R.drawable.library_music);
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_level_history);
+                //.withIcon(R.drawable.music_circle);
+        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.now_playing);
+                //.withIcon(R.drawable.ic_play_arrow_black_36dp);
 
-        mDrawer.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
+//create the drawer and remember the `Drawer` result object
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(topToolBar)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        item1,
+                        item2,
+                        item3
+                )
+                /*
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
 
+                        Fragment fragment = null;
+
+                        if(position==1){
+                            Log.e("onItemClick: ", " All Songs");
+                            fragment = new MainFragment();
+                        }
+                        else if(position==2){
+                            Log.e("onItemClick: ", " Favourites");
+                            fragment = new FavouritesFragment();
+                        }
+                        else if(position==3){
+                            Song song = musicSrv.getSong();
+                            fragment = NowPlaying.newInstance(song.getAlbumID(),
+                                    song.getAlbum(),song.getTitle(),song.getId());
+                        }
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fl_container, fragment);
+                        fragmentTransaction.commit();
+
+                        return false;
+                    }
+                })*/
+                .build();
     }
 
     @Override
