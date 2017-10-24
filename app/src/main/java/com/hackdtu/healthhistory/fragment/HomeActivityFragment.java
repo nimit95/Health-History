@@ -6,20 +6,34 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.HeadingView;
+import com.hackdtu.healthhistory.model.Image;
 import com.hackdtu.healthhistory.model.InfoView;
 import com.hackdtu.healthhistory.model.UserHistory;
+import com.hackdtu.healthhistory.utils.Constants;
+import com.hackdtu.healthhistory.utils.SuperPrefs;
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link HomeActivityFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+
+
 public class HomeActivityFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +45,10 @@ public class HomeActivityFragment extends Fragment {
     private String mParam2;
 
     private ExpandablePlaceHolderView mExpandableView;
+    private DatabaseReference databaseReference;
+    private HashSet<String> typesOfImagePresent;
+    private SuperPrefs superPrefs;
+    private ArrayList<Image> xRay,mRI,doctPresciption,ultrasound,testReport,others;
     public HomeActivityFragment() {
         // Required empty public constructor
     }
@@ -69,36 +87,99 @@ public class HomeActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_home_activity, container, false);
 
         initializeViews(rootView);
-        setUpExpandableView();
+        //setUpExpandableView();
         return rootView;
     }
 
     private void initializeViews(View rootView) {
+        typesOfImagePresent = new HashSet<>();
+        xRay = new ArrayList<>();
+        mRI = new ArrayList<>();
+        doctPresciption = new ArrayList<>();
+        ultrasound = new ArrayList<>();
+        testReport = new ArrayList<>();
+        others = new ArrayList<>();
+
         mExpandableView = (ExpandablePlaceHolderView)rootView.findViewById(R.id.expandableView);
+        superPrefs = new SuperPrefs(getActivity());
+        databaseReference = FirebaseDatabase.getInstance().getReference(
+                superPrefs.getString(Constants.USER_ID)
+        ).child(Constants.USER_IMG_FB);
+
+        setUpExpandableView();
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot data: dataSnapshot.getChildren()){
+                    Image image = data.getValue(Image.class);
+
+                    typesOfImagePresent.add(image.getImgType());
+                    int imgType = Integer.parseInt(image.getImgType());
+                    if(imgType == Integer.parseInt(Constants.DOCTOR_PRESCRIPTION_TYPE))
+                        doctPresciption.add(image);
+                    else if(imgType == Integer.parseInt(Constants.MRI_TYPE))
+                        mRI.add(image);
+                    else if(imgType == Integer.parseInt(Constants.OTHERS_REPORT_TYPE))
+                        others.add(image);
+                    else if(imgType == Integer.parseInt(Constants.TEST_REPORT_TYPE))
+                        testReport.add(image);
+                    else if (imgType == Integer.parseInt(Constants.XRAY_TYPE))
+                        xRay.add(image);
+                    else if (imgType == Integer.parseInt(Constants.ULTRASOUND_TYPE))
+                        ultrasound.add(image);
+                }
+
+                addChildViewsToView(0,xRay);
+                addChildViewsToView(1,mRI);
+                addChildViewsToView(2,doctPresciption);
+                addChildViewsToView(3,ultrasound);
+                addChildViewsToView(4,testReport);
+                addChildViewsToView(4,others);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        typesOfImagePresent = new HashSet<>();
+
+
+    }
+
+    private void addChildViewsToView(int pos,ArrayList<Image> arr) {
+
+        for(int i=0; i<arr.size();i++){
+            mExpandableView.addChildView(pos,
+                    new InfoView(getActivity(),arr.get(i)));
+        }
     }
 
     private void setUpExpandableView() {
-        //new ShowList().execute();
 
-        /*for(int i=0;i<10;i++) {
-            mExpandableView.addView(new HeadingView(getApplicationContext(), "Heading" + i));
-            for(int j=0;j<4;j++){
-                UserHistory userHistory = new UserHistory();
-                userHistory.setTitle("title"+j);
-                userHistory.setDescription("description"+j);
-                mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
-            }
-        }*/
-        for(int i=0;i<4;i++) {
-            if (i == 0)
-                mExpandableView.addView(new HeadingView(getActivity(), "June, 2017"));
-            if (i == 1)
-                mExpandableView.addView(new HeadingView(getActivity(), "May, 2017"));
-            if (i == 2)
-                mExpandableView.addView(new HeadingView(getActivity(), "March, 2017"));
-            if (i == 3)
-                mExpandableView.addView(new HeadingView(getActivity(), "January, 2017"));
-        }
+
+         //   if (typesOfImagePresent.contains(Constants.XRAY_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "X Rays"));
+
+         //   if (typesOfImagePresent.contains(Constants.MRI_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "MRI Report"));
+
+         //   if (typesOfImagePresent.contains(Constants.DOCTOR_PRESCRIPTION_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "Doctor Prescription"));
+
+
+        //    if (typesOfImagePresent.contains(Constants.ULTRASOUND_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "Ultrasound"));
+
+         //   if (typesOfImagePresent.contains(Constants.TEST_REPORT_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "Test Reports"));
+
+        //    if (typesOfImagePresent.contains(Constants.OTHERS_REPORT_TYPE))
+                mExpandableView.addView(new HeadingView(getActivity(), "Others"));
+
+        /*
         ArrayList<UserHistory> userHistoryList = new ArrayList<>();
 
         for(int j=0;j<4;j++){
@@ -110,7 +191,7 @@ public class HomeActivityFragment extends Fragment {
         userHistoryList.add(1,new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
                 , "Piyush", "20 june 2017", "Chest X Ray", "Little Congestion in chest","102"));
         mExpandableView.addChildView(0,new InfoView(getActivity(), userHistoryList.get(0)));
-        mExpandableView.addChildView(0, new InfoView(getActivity(), userHistoryList.get(1)));
+        mExpandableView.addChildView(0, new InfoView(getActivity(), userHistoryList.get(1)));*/
     }
 
 

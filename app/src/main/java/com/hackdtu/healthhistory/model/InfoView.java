@@ -44,29 +44,29 @@ public class InfoView {
     @View(R.id.imageView)
     private ImageView imageView;
 
-    private UserHistory userHistory;
+    private Image image;
     private Context mContext;
 
-    public InfoView(Context context, UserHistory userHistory) {
+    public InfoView(Context context, Image image) {
         mContext = context;
-        this.userHistory = userHistory;
+        this.image = image;
     }
 
     @Resolve
     private void onResolved() {
-        titleTxt.setText(userHistory.getImage_title());
-        captionTxt.setText(userHistory.getDisease());
-        timeTxt.setText(userHistory.getTime());
+        titleTxt.setText(image.getTitle());
+        captionTxt.setText(image.getTitle() +" 2");
+        timeTxt.setText(image.getTimeStamp());
         //timeTxt.setText(mInfo.getTime());
-        Log.e("dwjn",userHistory.getHistory_pic());
-        Picasso.with(mContext).load(userHistory.getHistory_pic()).into(imageView);
+        //Log.e("dwjn",userHistory.getHistory_pic());
+        Picasso.with(mContext).load(image.getUrl()).into(imageView);
         //Picasso.with(mContext).load(R.mipmap.ic_launcher).into(imageView);
     }
     @Click(R.id.ll)
     private void onClick(){
         Intent intent = new Intent(mContext, ImageDisplay.class);
         Log.e("k","mk");
-        intent.putExtra("path",userHistory.getHistory_pic());
+        intent.putExtra("path",image.getUrl());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }
