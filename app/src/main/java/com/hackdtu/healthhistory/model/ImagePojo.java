@@ -7,6 +7,7 @@ package com.hackdtu.healthhistory.model;
 public class ImagePojo {
     String title, timeStamp, url, description, imgType;
 
+    public ImagePojo(){}
     public ImagePojo(String title, String timeStamp, String url, String description, String imgType) {
         this.title = title;
         this.timeStamp = timeStamp;

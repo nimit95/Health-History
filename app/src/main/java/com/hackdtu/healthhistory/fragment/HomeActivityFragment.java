@@ -102,7 +102,7 @@ public class HomeActivityFragment extends Fragment {
 
         mExpandableView = (ExpandablePlaceHolderView)rootView.findViewById(R.id.expandableView);
         superPrefs = new SuperPrefs(getActivity());
-        databaseReference = FirebaseDatabase.getInstance().getReference(
+        databaseReference = FirebaseDatabase.getInstance().getReference(Constants.USERS_FB).child(
                 superPrefs.getString(Constants.USER_ID)
         ).child(Constants.USER_IMG_FB);
 
