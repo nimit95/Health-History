@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.network.Jsonparsor;
 import com.hackdtu.healthhistory.utils.Constants;
+import com.hackdtu.healthhistory.utils.SuperPrefs;
 import com.squareup.picasso.Picasso;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
@@ -60,36 +62,39 @@ import static com.hackdtu.healthhistory.utils.Constants.UPLOAD_URL;
 
 public class UploadActivity extends AppCompatActivity {
     private ProgressDialog pd;
+    private ProgressBar pb;
     private StorageReference mStorageRef;
     private static String TAG ="" ;
     private ImageView imageView;
     private EditText title,description;
     private Button uploadButton;
-    String path,name,ba1="";
-    int serverResponseCode = 0;
-    Jsonparsor jsonparsor;
-    JSONObject json;
+    private String path,name,ba1="";
     private String titleValue,descriptionValue;
-
+    private SuperPrefs superPrefs;
     private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-        mStorageRef= FirebaseStorage.getInstance().getReference();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        path=getIntent().getStringExtra("path");
+        name=getIntent().getStringExtra("name");
 
-        UploadService.HTTP_STACK = new OkHttpStack();
-        TAG=this.getClass().getSimpleName();
-        imageView=(ImageView)findViewById(R.id.image_to_be_uploaded);
-
-        jsonparsor=new Jsonparsor();
-         path=getIntent().getStringExtra("path");
-         name=getIntent().getStringExtra("name");
-
+        initializeViews();
         Picasso.with(UploadActivity.this).load(path).into(imageView);
 
+    }
+
+    private void initializeViews() {
+        superPrefs = new SuperPrefs(this);
+        mStorageRef = FirebaseStorage.getInstance().getReference(
+                superPrefs.getString(Constants.USER_ID));
+        mDatabase = FirebaseDatabase.getInstance().getReference(
+                superPrefs.getString(Constants.USER_ID));
+
+
+        TAG = this.getClass().getSimpleName();
+        imageView = (ImageView)findViewById(R.id.image_to_be_uploaded);
         title=(EditText)findViewById(R.id.photo_title);
         description=(EditText)findViewById(R.id.photo_description);
         uploadButton=(Button)findViewById(R.id.upload_button);
@@ -115,37 +120,19 @@ public class UploadActivity extends AppCompatActivity {
             }
         });
     }
+
     void upload()
     {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(this,"Please Check your connection",Toast.LENGTH_SHORT);
-            return;
-        }
-
-        String uid = user.getUid();
         Uri uri=Uri.parse(path);
 
         progressStart();
 
-        /*
-        StorageMetadata metadata=new StorageMetadata.Builder()
-                .setContentType("image/jpg")
-                .build();
-        */
-
-        StorageReference riversRef=mStorageRef.child(uid+"images/"+titleValue);
+        StorageReference riversRef=mStorageRef.child("images/"+titleValue);
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri url=taskSnapshot.getDownloadUrl();
-
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        Log.e(TAG, "onSuccess: "+url.toString() );
-                        //DatabaseReference mRef = mDatabase.getReference("imageUrl");
-                        //mRef.setValue(url);
-                        mDatabase.child("imageUrl").setValue(url);
+                        //Uri url=taskSnapshot.getDownloadUrl();
 
                         pd.dismiss();
                         //and displaying a success toast
@@ -172,6 +159,7 @@ public class UploadActivity extends AppCompatActivity {
                 });
     }
         void progressStart() {
+            //pb = new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
             pd = new ProgressDialog(UploadActivity.this);
             pd.setMessage("Upload Image Please Wait...");
             pd.setCancelable(false);
