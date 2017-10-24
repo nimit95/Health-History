@@ -1,12 +1,8 @@
 package com.hackdtu.healthhistory.activity;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,15 +26,12 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.User;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,15 +40,26 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
-    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
 
+        authInitialisation();
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
+    }
+
+    public void authInitialisation() {
         mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -67,139 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 //.enableAutoManage(, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
-        });
-        //askForPermission();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        // Log.e("yeh chal rha hai",currentUser.toString());
-        updateUI(currentUser);
-    }
-
-    private void updateUI(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            //askForPermission();
-            Log.e("updateUi", "Asking for perm");
-            //askForPermission();
-            //if(isLocationPresent())
-            startMainActivity();
-        }
-        if(currentUser==null){
-            Log.e(TAG, "updateUI: null aa rha hai" );
-        }
-    }
-
-
-    private void startMainActivity(){
-
-        Intent intent =new Intent(MainActivity.this,HomeActivity.class);
-
-        startActivity(intent);
-        finish();
-    }
-
-    private void login(final FirebaseUser currentUser) {
-
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-
-        final DatabaseReference userIdToFirebaseRef = mDatabase.child("userIdToUser");
-        Log.e(TAG, "login: "+userIdToFirebaseRef.getRef() );
-
-
-        userIdToFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(currentUser.getUid())){
-
-                    //  if(isLocationPresent())
-                    createNewUser(currentUser,mDatabase);
-//                   else
-//                       askForPermission();
-                }
-                else{
-                    getFirebaseUserId(userIdToFirebaseRef.child(currentUser.getUid()));
-
-                }
-                updateUI(currentUser);
-                userIdToFirebaseRef.removeEventListener(this);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void createNewUser(FirebaseUser currentUser, DatabaseReference mDatabase) {
-        DatabaseReference users = mDatabase.child("users").push();
-
-        SuperPrefs prefs = new SuperPrefs(MainActivity.this);
-        //Location location = new Location(prefs.getString("lon"),prefs.getString("lat"));
-        //Location location = new Location("0","0");
-  /*      User user = new User(users.getKey(),
-                currentUser.getDisplayName(), new ArrayList<String>(),
-                new UserLocation("0","0"));*/
-        User user = new User(currentUser.getDisplayName(), users.getKey(),"","", "");
-        users.setValue(user);
-
-        HashMap<String, String> hm = new HashMap<>();
-        hm.put(currentUser.getUid(), users.getKey());
-        mDatabase.child("userIdToUser").child(currentUser.getUid()).setValue(users.getKey());
-        Log.e("user-id-create new", users.getKey());
-        //saveUserDetailsToPref(user);
-
-
-
-        // askForPermission();
-    }
-    private void getFirebaseUserId(final DatabaseReference currentUserIdToFirebaseRef) {
-
-
-        currentUserIdToFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                //HashMap<String,String> hm = (HashMap<String, String>) dataSnapshot.getValue();
-                String firebaseUserId = dataSnapshot.getValue(String.class);
-                Log.e("user-id-getFirebase", firebaseUserId);
-                // new SuperPrefs(LoginActivity.this).setString("user-id",dataSnapshot.getValue(String.class));
-                currentUserIdToFirebaseRef.removeEventListener(this);
-                recoverUserFromDatabase(firebaseUserId);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-    public void recoverUserFromDatabase(final String firebaseUserId) {
-        FirebaseReference.userReference.child(firebaseUserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User currUser = dataSnapshot.getValue(User.class);
-                //saveUserDetailsToPref(currUser);
-                FirebaseReference.userReference.child(firebaseUserId).removeEventListener(this);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -243,16 +116,88 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-
                     }
                 });
     }
 
-   /* private void saveUserDetailsToPref(User user) {
-        SuperPrefs pref = new SuperPrefs(LoginActivity.this);
-        pref.setString("user-id", user.getUserId());
-        Log.e(TAG, "createNewUser: "+ user.getName());
+    private void login(final FirebaseUser currentUser) {
+        FirebaseReference.userReference.child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    //Existing User, retrieve data
+                    recoverUserFromDatabase(currentUser);
+                }
+                else {
+                    //Create new user in firebase database
+                    createNewUser(currentUser);
+                }
+                FirebaseReference.userReference.child(currentUser.getUid()).removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void recoverUserFromDatabase(final FirebaseUser firebaseUser) {
+        getFirebaseUserReference(firebaseUser).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currUser = dataSnapshot.getValue(User.class);
+                saveUserDetailsToPref(currUser);
+                updateUI(firebaseUser);
+                getFirebaseUserReference(firebaseUser).removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    DatabaseReference getFirebaseUserReference(FirebaseUser firebaseUser) {
+        return FirebaseReference.userReference.child(firebaseUser.getUid());
+    }
+    private void createNewUser(FirebaseUser firebaseUser) {
+        DatabaseReference users = getFirebaseUserReference(firebaseUser);
+        Log.d(TAG, "createNewUser: " + firebaseUser.getDisplayName() + users.getKey());
+        User user = new User(firebaseUser.getDisplayName(), users.getKey(), "", "", "");
+        users.setValue(user);
+        saveUserDetailsToPref(user);
+        updateUI(firebaseUser);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Log.e("yeh chal rha hai",currentUser.toString());
+        updateUI(currentUser);
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            Log.d("updateUi", "Asking for perm");
+            //Ask for permission here
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+
+            startActivity(intent);
+            finish();
+        }
+        if (currentUser == null) {
+            Log.e(TAG, "updateUI: null aa rha hai");
+        }
+    }
+
+    private void saveUserDetailsToPref(User user) {
+        SuperPrefs pref = new SuperPrefs(MainActivity.this);
+        pref.setString("user-id", user.getUserID());
+        Log.e(TAG, "createNewUser: " + user.getName());
         pref.setString("userName", user.getName());
-    }*/
+    }
 }

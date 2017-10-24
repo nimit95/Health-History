@@ -17,16 +17,16 @@
             android:name=".activity.MainActivity"
             android:theme="@style/NoActionbar"
             android:windowSoftInputMode="adjustResize">
-
-        </activity>
-        <activity
-            android:name=".activity.HomeActivity"
-            android:theme="@style/NoActionbar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:theme="@style/NoActionbar" >
+
         </activity>
         <activity android:name=".activity.UploadActivity" />
         <activity android:name=".activity.DiseaseListActivity" />
