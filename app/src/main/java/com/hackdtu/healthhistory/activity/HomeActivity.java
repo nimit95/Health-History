@@ -117,6 +117,33 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode==RESULT_OK && requestCode==REQ_CAMERA_IMAGE)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            /*
+            imageView.setImageBitmap(photo);
+            knop.setVisibility(Button.VISIBLE);*/
+
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+
+            //System.out.println(mImageCaptureUri);
+            Intent intent=new Intent(HomeActivity.this,UploadActivity.class);
+            intent.putExtra("path",tempUri.toString());
+            intent.putExtra("name",finalFile.getName());
+            startActivity(intent);
+
+        }
+    }
+
     private void attachFragment() {
         Fragment fragment = new HomeActivityFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -202,32 +229,6 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode==RESULT_OK && requestCode==REQ_CAMERA_IMAGE)
-        {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            /*
-            imageView.setImageBitmap(photo);
-            knop.setVisibility(Button.VISIBLE);*/
-
-
-            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-            Uri tempUri = getImageUri(getApplicationContext(), photo);
-
-            // CALL THIS METHOD TO GET THE ACTUAL PATH
-            File finalFile = new File(getRealPathFromURI(tempUri));
-
-            //System.out.println(mImageCaptureUri);
-            Intent intent=new Intent(HomeActivity.this,UploadActivity.class);
-            intent.putExtra("path",tempUri.toString());
-            intent.putExtra("name",finalFile.getName());
-            startActivity(intent);
-
-        }
-    }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -242,6 +243,7 @@ public class HomeActivity extends AppCompatActivity {
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
+
     public class ShowList extends AsyncTask<Object, Object, String>{
 
         @Override
