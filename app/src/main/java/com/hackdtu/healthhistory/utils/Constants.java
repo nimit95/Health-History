@@ -13,4 +13,11 @@ public interface Constants {
     String IMAGE_URL = "http://sahil99.pythonanywhere.com";
 
     String USER_ID = "user-id";
+    String USER_IMG_FB = "userImages";
+    String XRAY_TYPE = "1";
+    String MRI_TYPE = "2";
+    String DOCTOR_PRESCRIPTION_TYPE = "3";
+    String ULTRASOUND_TYPE = "4";
+    String TEST_REPORT_TYPE = "5";
+    String OTHERS_REPORT_TYPE = "6";
 }

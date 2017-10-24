@@ -8,16 +8,19 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,7 +34,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.model.Image;
 import com.hackdtu.healthhistory.network.Jsonparsor;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
@@ -55,6 +60,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static com.hackdtu.healthhistory.utils.Constants.UPLOAD_URL;
@@ -72,6 +78,7 @@ public class UploadActivity extends AppCompatActivity {
     private String titleValue,descriptionValue;
     private SuperPrefs superPrefs;
     private DatabaseReference mDatabase;
+    private Spinner spinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +88,14 @@ public class UploadActivity extends AppCompatActivity {
         name=getIntent().getStringExtra("name");
 
         initializeViews();
-        Picasso.with(UploadActivity.this).load(path).into(imageView);
 
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(),Uri.parse(path));
+            imageView.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Picasso.with(UploadActivity.this).load(path).into(imageView);
     }
 
     private void initializeViews() {
@@ -119,6 +132,21 @@ public class UploadActivity extends AppCompatActivity {
                 }
             }
         });
+
+        spinner = (Spinner) findViewById(R.id.spinner);
+
+        ArrayList<String> stringList = new ArrayList<>();
+        stringList.add("X Ray");
+        stringList.add("MRI Report");
+        stringList.add("Doctor Prescription");
+        stringList.add("Ultrasound");
+        stringList.add("Test Report");
+        stringList.add("Others");
+
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, stringList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
     }
 
     void upload()
@@ -127,13 +155,22 @@ public class UploadActivity extends AppCompatActivity {
 
         progressStart();
 
-        StorageReference riversRef=mStorageRef.child("images/"+titleValue);
+        StorageReference riversRef=mStorageRef.child("images/"+System.currentTimeMillis());
         riversRef.putFile(uri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        //Uri url=taskSnapshot.getDownloadUrl();
 
+                        String type = getTypeOfImage();
+                        Uri url=taskSnapshot.getMetadata().getDownloadUrl();
+                        Image image = new Image(titleValue,String.valueOf(System.currentTimeMillis()),
+                                url.toString(),descriptionValue,type);
+
+                        //DatabaseReference databaseReference = mDatabase.child(Constants.USER_IMG_FB).push();
+
+                        FirebaseReference.userReference.child(
+                                superPrefs.getString(Constants.USER_ID)
+                        ).child(Constants.USER_IMG_FB).child(image.getTimeStamp()).setValue(image);
                         pd.dismiss();
                         //and displaying a success toast
                         Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
@@ -151,10 +188,10 @@ public class UploadActivity extends AppCompatActivity {
                     @Override
                     public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                         //calculating progress percentage
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / (double) taskSnapshot.getTotalByteCount();
 
                         //displaying percentage in progress dialog
-                        pd.setMessage("Uploaded " + ((int) progress) + "%...");
+                        pd.setMessage("Uploaded " + ( progress) + "%...");
                     }
                 });
     }
@@ -165,5 +202,29 @@ public class UploadActivity extends AppCompatActivity {
             pd.setCancelable(false);
             pd.show();
         }
+
+    public String getTypeOfImage() {
+        String typeOfImage="";
+        int pos= spinner.getSelectedItemPosition();
+
+        switch (pos){
+            case 0:
+                typeOfImage = Constants.XRAY_TYPE;
+                break;
+            case 1:
+                typeOfImage = Constants.MRI_TYPE;
+                break;
+            case 2:
+                typeOfImage = Constants.DOCTOR_PRESCRIPTION_TYPE;
+                break;
+            case 3:
+                typeOfImage = Constants.ULTRASOUND_TYPE;
+                break;
+            case 4:
+                typeOfImage = Constants.TEST_REPORT_TYPE;
+                break;
+        }
+        return typeOfImage;
     }
+}
 
