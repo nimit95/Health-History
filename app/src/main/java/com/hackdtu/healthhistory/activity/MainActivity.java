@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         getFirebaseUserReference(firebaseUser).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "Existing user");
                 User currUser = dataSnapshot.getValue(User.class);
                 saveUserDetailsToPref(currUser);
                 updateUI(firebaseUser);
@@ -197,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
     private void saveUserDetailsToPref(User user) {
         SuperPrefs pref = new SuperPrefs(MainActivity.this);
         pref.setString("user-id", user.getUserID());
-        Log.e(TAG, "createNewUser: " + user.getName());
         pref.setString("userName", user.getName());
     }
 }
