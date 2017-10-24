@@ -55,17 +55,18 @@ public class InfoView {
     @Resolve
     private void onResolved() {
         titleTxt.setText(userHistory.getImage_title());
-        captionTxt.setText("Look at this");
+        captionTxt.setText(userHistory.getDisease());
+        timeTxt.setText(userHistory.getTime());
         //timeTxt.setText(mInfo.getTime());
         Log.e("dwjn",userHistory.getHistory_pic());
-        Picasso.with(mContext).load(Constants.IMAGE_URL+userHistory.getHistory_pic()).into(imageView);
+        Picasso.with(mContext).load(userHistory.getHistory_pic()).into(imageView);
         //Picasso.with(mContext).load(R.mipmap.ic_launcher).into(imageView);
     }
     @Click(R.id.ll)
     private void onClick(){
         Intent intent = new Intent(mContext, ImageDisplay.class);
         Log.e("k","mk");
-        intent.putExtra("path",Constants.IMAGE_URL+userHistory.getHistory_pic());
+        intent.putExtra("path",userHistory.getHistory_pic());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
     }

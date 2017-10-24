@@ -15,6 +15,16 @@ public class UserHistory {
     private String image_title;
     private String Disease;
     private String blood_sugar_level;
+
+    public UserHistory(String history_pic, String user, String time, String image_title, String details, String blood_sugar_level) {
+        this.history_pic = history_pic;
+        this.user = user;
+        this.time = time;
+        this.image_title = image_title;
+        Disease = details;
+        this.blood_sugar_level = blood_sugar_level;
+    }
+
     public String getHistory_pic() {
         return history_pic;
     }

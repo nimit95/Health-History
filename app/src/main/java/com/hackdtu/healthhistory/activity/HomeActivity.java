@@ -20,6 +20,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -86,6 +91,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);
             }
         });
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("imageUrl");
+
         mDrawer = (DrawerLayout)findViewById(R.id.drawerLayout);
         mDrawerView = (PlaceHolderView)findViewById(R.id.drawerView);
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -104,6 +112,44 @@ public class HomeActivity extends AppCompatActivity {
                 mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
             }
         }*/
+        for(int i=0;i<4;i++) {
+            if (i == 0)
+                mExpandableView.addView(new HeadingView(getApplicationContext(), "June, 2017"));
+            if (i == 1)
+                mExpandableView.addView(new HeadingView(getApplicationContext(), "May, 2017"));
+            if (i == 2)
+                mExpandableView.addView(new HeadingView(getApplicationContext(), "March, 2017"));
+            if (i == 3)
+                mExpandableView.addView(new HeadingView(getApplicationContext(), "January, 2017"));
+        }
+        ArrayList<UserHistory> userHistoryList = new ArrayList<>();
+
+        for(int j=0;j<4;j++){
+            userHistoryList.add(new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
+            , "lalu", "21 june 2017", "Blood test Report", "Detailed report awaited","102"));
+            UserHistory userHistory = userHistoryList.get(j);
+           // mExpandableView.addView();
+        }
+        userHistoryList.add(1,new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
+                , "Piyush", "20 june 2017", "Chest X Ray", "Little Congestion in chest","102"));
+        mExpandableView.addChildView(0,new InfoView(getApplicationContext(), userHistoryList.get(0)));
+        mExpandableView.addChildView(0, new InfoView(getApplicationContext(), userHistoryList.get(1)));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+
+                Log.d("app", "Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("app", "Failed to read value.", error.toException());
+            }
+        });
     }
     private void setupDrawer(){
         mDrawerView
@@ -127,6 +173,7 @@ public class HomeActivity extends AppCompatActivity {
 
         mDrawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+
     }
 
     @Override
@@ -208,23 +255,10 @@ public class HomeActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                for(int i=0;i<4;i++) {
-                    if(i==0)
-                        mExpandableView.addView(new HeadingView(getApplicationContext(), "January, 2017"));
-                    if(i==1)
-                        mExpandableView.addView(new HeadingView(getApplicationContext(), "February, 2017"));
-                    if(i==2)
-                        mExpandableView.addView(new HeadingView(getApplicationContext(), "March, 2017"));
-                    if(i==3)
-                        mExpandableView.addView(new HeadingView(getApplicationContext(), "April, 2017"));
-                    for(int j=0;j<4;j++){
-                        UserHistory userHistory = userHistoryLists.get(j);
-                       // userHistory.setImage_title(userHistory.getImage_title());
-                        //userHistory.set("description"+j);
-                        mExpandableView.addView(new InfoView(getApplicationContext(), userHistory));
-                    }
+
+
                 Log.e("onPostExecute: ",s );
             }
-        }
+
     }}
 }

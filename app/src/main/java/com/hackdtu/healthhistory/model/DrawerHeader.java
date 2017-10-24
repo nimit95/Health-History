@@ -3,6 +3,8 @@ package com.hackdtu.healthhistory.model;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.hackdtu.healthhistory.R;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.NonReusable;
@@ -28,7 +30,13 @@ public class DrawerHeader {
 
     @Resolve
     private void onResolved() {
-        nameTxt.setText("Nimit Aggarwal");
-        emailTxt.setText("nimitagg95@gmail.com");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            nameTxt.setText(name);
+            emailTxt.setText(email);
+        }
     }
 }
