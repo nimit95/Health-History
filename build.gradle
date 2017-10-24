@@ -2,6 +2,7 @@
 
 buildscript {
     ext.firebase_version= '11.0.4'
+    ext.support_lib_version = '26.0.0'
     repositories {
         jcenter()
     }
@@ -17,6 +18,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+            maven {
+                url "https://maven.google.com"
+            }
     }
 }
 
