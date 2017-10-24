@@ -44,7 +44,8 @@ public class HomeActivityFragment extends Fragment {
     private DatabaseReference databaseReference;
     private HashSet<String> typesOfImagePresent;
     private SuperPrefs superPrefs;
-    private ArrayList<ImagePojo> xRay,mRI,doctPresciption,ultrasound,testReport,others;
+    private ArrayList<ImagePojo> xRay, mRI, doctPresciption, ultrasound, testReport, others;
+
     public HomeActivityFragment() {
         // Required empty public constructor
     }
@@ -96,7 +97,7 @@ public class HomeActivityFragment extends Fragment {
         testReport = new ArrayList<>();
         others = new ArrayList<>();
 
-        mExpandableView = (ExpandablePlaceHolderView)rootView.findViewById(R.id.expandableView);
+        mExpandableView = (ExpandablePlaceHolderView) rootView.findViewById(R.id.expandableView);
         superPrefs = new SuperPrefs(getActivity());
         databaseReference = FirebaseDatabase.getInstance().getReference(Constants.USERS_FB).child(
                 superPrefs.getString(Constants.USER_ID)
@@ -108,18 +109,18 @@ public class HomeActivityFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot data: dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     ImagePojo image = data.getValue(ImagePojo.class);
 
                     typesOfImagePresent.add(image.getImgType());
                     int imgType = Integer.parseInt(image.getImgType());
-                    if(imgType == Integer.parseInt(Constants.DOCTOR_PRESCRIPTION_TYPE))
+                    if (imgType == Integer.parseInt(Constants.DOCTOR_PRESCRIPTION_TYPE))
                         doctPresciption.add(image);
-                    else if(imgType == Integer.parseInt(Constants.MRI_TYPE))
+                    else if (imgType == Integer.parseInt(Constants.MRI_TYPE))
                         mRI.add(image);
-                    else if(imgType == Integer.parseInt(Constants.OTHERS_REPORT_TYPE))
+                    else if (imgType == Integer.parseInt(Constants.OTHERS_REPORT_TYPE))
                         others.add(image);
-                    else if(imgType == Integer.parseInt(Constants.TEST_REPORT_TYPE))
+                    else if (imgType == Integer.parseInt(Constants.TEST_REPORT_TYPE))
                         testReport.add(image);
                     else if (imgType == Integer.parseInt(Constants.XRAY_TYPE))
                         xRay.add(image);
@@ -127,12 +128,12 @@ public class HomeActivityFragment extends Fragment {
                         ultrasound.add(image);
                 }
 
-                addChildViewsToView(0,xRay);
-                addChildViewsToView(1,mRI);
-                addChildViewsToView(2,doctPresciption);
-                addChildViewsToView(3,ultrasound);
-                addChildViewsToView(4,testReport);
-                addChildViewsToView(4,others);
+                addChildViewsToView(0, xRay);
+                addChildViewsToView(1, mRI);
+                addChildViewsToView(2, doctPresciption);
+                addChildViewsToView(3, ultrasound);
+                addChildViewsToView(4, testReport);
+                addChildViewsToView(4, others);
             }
 
             @Override
@@ -145,35 +146,35 @@ public class HomeActivityFragment extends Fragment {
 
     }
 
-    private void addChildViewsToView(int pos,ArrayList<ImagePojo> arr) {
+    private void addChildViewsToView(int pos, ArrayList<ImagePojo> arr) {
 
-        for(int i=0; i<arr.size();i++){
+        for (int i = 0; i < arr.size(); i++) {
             mExpandableView.addChildView(pos,
-                    new InfoView(getActivity(),arr.get(i)));
+                    new InfoView(getActivity(), arr.get(i)));
         }
     }
 
     private void setUpExpandableView() {
 
 
-         //   if (typesOfImagePresent.contains(Constants.XRAY_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "X Rays"));
+        //   if (typesOfImagePresent.contains(Constants.XRAY_TYPE))
+        mExpandableView.addView(new HeadingView(getActivity(), "X Rays"));
 
-         //   if (typesOfImagePresent.contains(Constants.MRI_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "MRI Report"));
+        //   if (typesOfImagePresent.contains(Constants.MRI_TYPE))
+        mExpandableView.addView(new HeadingView(getActivity(), "MRI Report"));
 
-         //   if (typesOfImagePresent.contains(Constants.DOCTOR_PRESCRIPTION_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "Doctor Prescription"));
+        //   if (typesOfImagePresent.contains(Constants.DOCTOR_PRESCRIPTION_TYPE))
+        mExpandableView.addView(new HeadingView(getActivity(), "Doctor Prescription"));
 
 
         //    if (typesOfImagePresent.contains(Constants.ULTRASOUND_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "Ultrasound"));
+        mExpandableView.addView(new HeadingView(getActivity(), "Ultrasound"));
 
-         //   if (typesOfImagePresent.contains(Constants.TEST_REPORT_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "Test Reports"));
+        //   if (typesOfImagePresent.contains(Constants.TEST_REPORT_TYPE))
+        mExpandableView.addView(new HeadingView(getActivity(), "Test Reports"));
 
         //    if (typesOfImagePresent.contains(Constants.OTHERS_REPORT_TYPE))
-                mExpandableView.addView(new HeadingView(getActivity(), "Others"));
+        mExpandableView.addView(new HeadingView(getActivity(), "Others"));
     }
 
 
