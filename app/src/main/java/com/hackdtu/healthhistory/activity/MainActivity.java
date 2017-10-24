@@ -1,138 +1,258 @@
 package com.hackdtu.healthhistory.activity;
 
+import android.Manifest;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.hackdtu.healthhistory.BuildConfig;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.User;
-import com.hackdtu.healthhistory.network.NetworkCall;
-import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
-import net.gotev.uploadservice.UploadService;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "hackdtu.healthhistory";
-    private EditText adhaarNo, password;
+
+    private static final String TAG = "MainActivity";
+
+    private GoogleApiClient mGoogleApiClient;
+    private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private Button login;
-    SuperPrefs superPrefs;
-    private TextView signUp;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1001;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        superPrefs=new SuperPrefs(MainActivity.this);
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                    finish();
-                    // User is signed in
-                    Log.d(TAG, ":" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
 
-        adhaarNo = (EditText) findViewById(R.id.aadhar);
-        password = (EditText) findViewById(R.id.password);
-        signUp = (TextView) findViewById(R.id.sign_up);
-        login = (Button) findViewById(R.id.login);
-        login.setOnClickListener(new View.OnClickListener() {
+        mAuth = FirebaseAuth.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                //.enableAutoManage(, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(password.getText().toString().length()!=0) {
-                    login(adhaarNo.getText().toString(), password.getText().toString());
-                }
-                else
-                    Toast.makeText(getApplicationContext(), "Enter Valid Data", Toast.LENGTH_SHORT).show();
+                signIn();
             }
         });
-        signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
-                startActivity(intent);
-            }
-        });
+        //askForPermission();
     }
-    /*
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-if (user != null) {
-    // Name, email address, and profile photo Url
-    String name = user.getDisplayName();
-    String email = user.getEmail();
-    Uri photoUrl = user.getPhotoUrl();
-
-    // The user's ID, unique to the Firebase project. Do NOT use this value to
-    // authenticate with your backend server, if you have one. Use
-    // FirebaseUser.getToken() instead.
-    String uid = user.getUid();
-}
-    */
 
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        // Log.e("yeh chal rha hai",currentUser.toString());
+        updateUI(currentUser);
     }
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            //askForPermission();
+            Log.e("updateUi", "Asking for perm");
+            //askForPermission();
+            //if(isLocationPresent())
+            startMainActivity();
+        }
+        if(currentUser==null){
+            Log.e(TAG, "updateUI: null aa rha hai" );
         }
     }
-    void login(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
+
+
+    private void startMainActivity(){
+
+        Intent intent =new Intent(MainActivity.this,HomeActivity.class);
+
+        startActivity(intent);
+        finish();
+    }
+
+    private void login(final FirebaseUser currentUser) {
+
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        final DatabaseReference userIdToFirebaseRef = mDatabase.child("userIdToUser");
+        Log.e(TAG, "login: "+userIdToFirebaseRef.getRef() );
+
+
+        userIdToFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.hasChild(currentUser.getUid())){
+
+                    //  if(isLocationPresent())
+                    createNewUser(currentUser,mDatabase);
+//                   else
+//                       askForPermission();
+                }
+                else{
+                    getFirebaseUserId(userIdToFirebaseRef.child(currentUser.getUid()));
+
+                }
+                updateUI(currentUser);
+                userIdToFirebaseRef.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void createNewUser(FirebaseUser currentUser, DatabaseReference mDatabase) {
+        DatabaseReference users = mDatabase.child("users").push();
+
+        SuperPrefs prefs = new SuperPrefs(MainActivity.this);
+        //Location location = new Location(prefs.getString("lon"),prefs.getString("lat"));
+        //Location location = new Location("0","0");
+  /*      User user = new User(users.getKey(),
+                currentUser.getDisplayName(), new ArrayList<String>(),
+                new UserLocation("0","0"));*/
+        User user = new User(currentUser.getDisplayName(), users.getKey(),"","", "");
+        users.setValue(user);
+
+        HashMap<String, String> hm = new HashMap<>();
+        hm.put(currentUser.getUid(), users.getKey());
+        mDatabase.child("userIdToUser").child(currentUser.getUid()).setValue(users.getKey());
+        Log.e("user-id-create new", users.getKey());
+        //saveUserDetailsToPref(user);
+
+
+
+        // askForPermission();
+    }
+    private void getFirebaseUserId(final DatabaseReference currentUserIdToFirebaseRef) {
+
+
+        currentUserIdToFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //HashMap<String,String> hm = (HashMap<String, String>) dataSnapshot.getValue();
+                String firebaseUserId = dataSnapshot.getValue(String.class);
+                Log.e("user-id-getFirebase", firebaseUserId);
+                // new SuperPrefs(LoginActivity.this).setString("user-id",dataSnapshot.getValue(String.class));
+                currentUserIdToFirebaseRef.removeEventListener(this);
+                recoverUserFromDatabase(firebaseUserId);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void recoverUserFromDatabase(final String firebaseUserId) {
+        FirebaseReference.userReference.child(firebaseUserId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User currUser = dataSnapshot.getValue(User.class);
+                //saveUserDetailsToPref(currUser);
+                FirebaseReference.userReference.child(firebaseUserId).removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    private void signIn() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
+
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
 
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail:failed", task.getException());
-                            Toast.makeText(MainActivity.this, "Login Failed",
+                            Log.e(TAG, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            login(user);
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                            updateUI(null);
                         }
-                        else {
-                            startActivity(new Intent(MainActivity.this, HomeActivity.class));
-                            finish();
-                        }
-                        // ...
+
+
                     }
                 });
     }
+
+   /* private void saveUserDetailsToPref(User user) {
+        SuperPrefs pref = new SuperPrefs(LoginActivity.this);
+        pref.setString("user-id", user.getUserId());
+        Log.e(TAG, "createNewUser: "+ user.getName());
+        pref.setString("userName", user.getName());
+    }*/
 }

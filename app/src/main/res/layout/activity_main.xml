@@ -1,70 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hackdtu.healthhistory.activity.MainActivity">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        >
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:id="@+id/aadhar2"
 
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/colorPrimary">
-
-        <EditText
-            android:id="@+id/aadhar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="1"
-            android:hint="Email id"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:textColor="@color/text_color" />
-    </android.support.design.widget.TextInputLayout>
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/aadhar2"
-
-        android:id="@+id/password2"
-        android:textColorHint="@color/colorPrimary">
-
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="1"
-
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:textColor="@color/text_color" />
-    </android.support.design.widget.TextInputLayout>
-    <Button
-        android:layout_width="150dp"
-        android:layout_below="@+id/password2"
-        android:layout_centerHorizontal="true"
-        android:text="Login"
-        android:textColor="@color/white"
-        android:background="@drawable/mybutton"
-        android:id="@+id/login"
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_alignBottom="@+id/login"
-        android:textAlignment="center"
-        android:layout_marginTop="30dp"
-        android:id="@+id/sign_up"
-        android:textSize="20sp"
-        android:text="Sign Up"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/colorPrimary"
-        android:layout_height="wrap_content" />
-    </RelativeLayout>
-</RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>
