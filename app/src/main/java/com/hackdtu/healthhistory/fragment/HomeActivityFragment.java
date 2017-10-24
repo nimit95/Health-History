@@ -6,8 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,14 +16,12 @@ import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.HeadingView;
 import com.hackdtu.healthhistory.model.ImagePojo;
 import com.hackdtu.healthhistory.model.InfoView;
-import com.hackdtu.healthhistory.model.UserHistory;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 import com.mindorks.placeholderview.ExpandablePlaceHolderView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -178,20 +174,6 @@ public class HomeActivityFragment extends Fragment {
 
         //    if (typesOfImagePresent.contains(Constants.OTHERS_REPORT_TYPE))
                 mExpandableView.addView(new HeadingView(getActivity(), "Others"));
-
-        /*
-        ArrayList<UserHistory> userHistoryList = new ArrayList<>();
-
-        for(int j=0;j<4;j++){
-            userHistoryList.add(new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
-                    , "lalu", "21 june 2017", "Blood test Report", "Detailed report awaited","102"));
-            UserHistory userHistory = userHistoryList.get(j);
-            // mExpandableView.addView();
-        }
-        userHistoryList.add(1,new UserHistory("https://firebasestorage.googleapis.com/v0/b/healthhistory-459fe.appspot.com/o/WZvBhbeWmuMB6gTEt4149PUbN4t1images%2Ftesting?alt=media&token=52f4c92d-f14a-4cca-a201-ba85f489fbd5"
-                , "Piyush", "20 june 2017", "Chest X Ray", "Little Congestion in chest","102"));
-        mExpandableView.addChildView(0,new InfoView(getActivity(), userHistoryList.get(0)));
-        mExpandableView.addChildView(0, new InfoView(getActivity(), userHistoryList.get(1)));*/
     }
 
 
