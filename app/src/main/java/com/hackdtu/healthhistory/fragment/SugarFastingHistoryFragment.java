@@ -51,8 +51,6 @@ public class SugarFastingHistoryFragment extends Fragment {
     private EditText etSugarFasting;
     private Button btnSugarFasting;
     protected LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX, tvY;
     private SuperPrefs superPrefs;
     private DatabaseReference dataBaseReference;
     private ArrayList<SugarLevel> sugarLevelArrayList;
@@ -102,11 +100,6 @@ public class SugarFastingHistoryFragment extends Fragment {
     private void initializeViews(View rootView) {
         etSugarFasting = (EditText) rootView.findViewById(R.id.et_sugar_fasting);
         btnSugarFasting = (Button) rootView.findViewById(R.id.btn_sugar_fasting);
-        tvX = (TextView) rootView.findViewById(R.id.tvXMax);
-        tvY = (TextView) rootView.findViewById(R.id.tvYMax);
-
-        mSeekBarX = (SeekBar) rootView.findViewById(R.id.seekBar1);
-        mSeekBarY = (SeekBar) rootView.findViewById(R.id.seekBar2);
 
         mChart = (LineChart) rootView.findViewById(R.id.chart1);
         //mChart = new LineChart(getActivity());
@@ -167,8 +160,11 @@ public class SugarFastingHistoryFragment extends Fragment {
 
         Log.e("piyush", "list obtained");
         for(int i=0; i<sugarLevelArrayList.size();i++){
+            /*
             Entry entry = new Entry(
-                    Float.parseFloat(sugarLevelArrayList.get(i).getTime()),
+                    Float.parseFloat(String.valueOf(Math.ceil(Double.parseDouble(sugarLevelArrayList.get(i).getTime())/1000))),
+                    Float.parseFloat(sugarLevelArrayList.get(i).getValue()));*/
+            Entry entry = new Entry(Float.parseFloat(""+(i+1)),
                     Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
             entryList.add(entry);
         }
