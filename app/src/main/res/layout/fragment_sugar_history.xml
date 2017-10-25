@@ -32,11 +32,16 @@
         android:layout_below="@+id/ll_add"
         android:layout_height="match_parent" >
 
+        <!--
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            />
+            />-->
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </RelativeLayout>
 
 </RelativeLayout>

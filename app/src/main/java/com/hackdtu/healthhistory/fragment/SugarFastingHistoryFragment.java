@@ -31,7 +31,13 @@ import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +61,8 @@ public class SugarFastingHistoryFragment extends Fragment {
     private DatabaseReference dataBaseReference;
     private ArrayList<SugarLevel> sugarLevelArrayList;
     private DatabaseReference temp;
+
+    private LineChartView lineCHartView;
     public SugarFastingHistoryFragment() {
         // Required empty public constructor
     }
@@ -101,7 +109,8 @@ public class SugarFastingHistoryFragment extends Fragment {
         etSugarFasting = (EditText) rootView.findViewById(R.id.et_sugar_fasting);
         btnSugarFasting = (Button) rootView.findViewById(R.id.btn_sugar_fasting);
 
-        mChart = (LineChart) rootView.findViewById(R.id.chart1);
+        lineCHartView = (LineChartView)rootView.findViewById(R.id.chart1);
+        //mChart = (LineChart) rootView.findViewById(R.id.chart1);
         //mChart = new LineChart(getActivity());
 
         superPrefs = new SuperPrefs(getActivity());
@@ -154,16 +163,12 @@ public class SugarFastingHistoryFragment extends Fragment {
     }
 
 
-
+/*
     private void makeGraph() {
         List<Entry> entryList = new ArrayList<>();
 
         Log.e("piyush", "list obtained");
         for(int i=0; i<sugarLevelArrayList.size();i++){
-            /*
-            Entry entry = new Entry(
-                    Float.parseFloat(String.valueOf(Math.ceil(Double.parseDouble(sugarLevelArrayList.get(i).getTime())/1000))),
-                    Float.parseFloat(sugarLevelArrayList.get(i).getValue()));*/
             Entry entry = new Entry(Float.parseFloat(""+(i+1)),
                     Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
             entryList.add(entry);
@@ -176,5 +181,27 @@ public class SugarFastingHistoryFragment extends Fragment {
         mChart.setData(lineData);
         mChart.invalidate();
     }
+*/
 
+    private void makeGraph() {
+        //lineCHartView.setInteractive(true);
+        List<PointValue> values = new ArrayList<>();
+
+        for(int i=0; i<sugarLevelArrayList.size();i++){
+            PointValue point = new PointValue(Float.parseFloat(""+(i+1)),
+                    Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
+            Date date = new Date(sugarLevelArrayList.get(i).getTime());
+            point.setLabel(sugarLevelArrayList.get(i).getValue() + " " + date);
+            values.add(point);
+        }
+
+        Line line = new Line(values).setColor(Color.BLUE).setCubic(false)
+                .setHasPoints(true).setHasLabels(true);
+        List<Line> lines = new ArrayList<Line>();
+        lines.add(line);
+
+        LineChartData data = new LineChartData();
+        data.setLines(lines);
+        lineCHartView.setLineChartData(data);
+    }
 }
