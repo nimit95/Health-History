@@ -162,7 +162,11 @@ public class HomeActivity extends AppCompatActivity {
                 /*
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);*/
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
                 MainActionDialog mainActionDialog = new MainActionDialog();
+
                 mainActionDialog.show(getSupportFragmentManager(),"FAB");
             }
         });
