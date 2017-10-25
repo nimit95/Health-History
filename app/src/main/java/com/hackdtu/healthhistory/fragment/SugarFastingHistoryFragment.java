@@ -196,33 +196,6 @@ public class SugarFastingHistoryFragment extends Fragment {
         mChart.invalidate();
         mChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
         mChart.getXAxis().setLabelRotationAngle(-45);
+        mChart.invalidate();
     }
-
-/*
-    private void makeGraph() {
-        //lineCHartView.setInteractive(true);
-        List<PointValue> values = new ArrayList<>();
-
-        for(int i=0; i<sugarLevelArrayList.size();i++){
-            PointValue point = new PointValue(Float.parseFloat(""+(i+1)),
-                    Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
-
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            String dateString = formatter.format(new Date(
-                    Long.parseLong(sugarLevelArrayList.get(i).getTime())));
-
-            point.setLabel(sugarLevelArrayList.get(i).getValue() + "\n" + dateString);
-            values.add(point);
-        }
-
-        Line line = new Line(values).setColor(Color.BLUE).setCubic(false)
-                .setHasPoints(true).setHasLabels(true);
-        List<Line> lines = new ArrayList<Line>();
-        lines.add(line);
-
-        LineChartData data = new LineChartData();
-        data.setLines(lines);
-
-        lineCHartView.setLineChartData(data);
-    }*/
 }
