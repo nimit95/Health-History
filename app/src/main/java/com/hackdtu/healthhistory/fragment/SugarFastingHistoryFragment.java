@@ -17,9 +17,12 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,13 +33,17 @@ import com.hackdtu.healthhistory.model.SugarLevel;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import lecho.lib.hellocharts.model.Axis;
+import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -109,8 +116,8 @@ public class SugarFastingHistoryFragment extends Fragment {
         etSugarFasting = (EditText) rootView.findViewById(R.id.et_sugar_fasting);
         btnSugarFasting = (Button) rootView.findViewById(R.id.btn_sugar_fasting);
 
-        lineCHartView = (LineChartView)rootView.findViewById(R.id.chart1);
-        //mChart = (LineChart) rootView.findViewById(R.id.chart1);
+        //lineCHartView = (LineChartView)rootView.findViewById(R.id.chart1);
+        mChart = (LineChart) rootView.findViewById(R.id.chart1);
         //mChart = new LineChart(getActivity());
 
         superPrefs = new SuperPrefs(getActivity());
@@ -163,14 +170,20 @@ public class SugarFastingHistoryFragment extends Fragment {
     }
 
 
-/*
+
     private void makeGraph() {
         List<Entry> entryList = new ArrayList<>();
 
         Log.e("piyush", "list obtained");
+        String[] labels = new String[sugarLevelArrayList.size()];
         for(int i=0; i<sugarLevelArrayList.size();i++){
             Entry entry = new Entry(Float.parseFloat(""+(i+1)),
                     Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formatter.format(new Date(
+                    Long.parseLong(sugarLevelArrayList.get(i).getTime())));
+            labels[i] = dateString;
             entryList.add(entry);
         }
         LineDataSet lineDataSet = new LineDataSet(entryList,"Label");
@@ -178,11 +191,14 @@ public class SugarFastingHistoryFragment extends Fragment {
         lineDataSet.setValueTextColor(Color.BLUE);
 
         LineData lineData = new LineData(lineDataSet);
+
         mChart.setData(lineData);
         mChart.invalidate();
+        mChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        mChart.getXAxis().setLabelRotationAngle(-45);
     }
-*/
 
+/*
     private void makeGraph() {
         //lineCHartView.setInteractive(true);
         List<PointValue> values = new ArrayList<>();
@@ -190,8 +206,12 @@ public class SugarFastingHistoryFragment extends Fragment {
         for(int i=0; i<sugarLevelArrayList.size();i++){
             PointValue point = new PointValue(Float.parseFloat(""+(i+1)),
                     Float.parseFloat(sugarLevelArrayList.get(i).getValue()));
-            Date date = new Date(sugarLevelArrayList.get(i).getTime());
-            point.setLabel(sugarLevelArrayList.get(i).getValue() + " " + date);
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formatter.format(new Date(
+                    Long.parseLong(sugarLevelArrayList.get(i).getTime())));
+
+            point.setLabel(sugarLevelArrayList.get(i).getValue() + "\n" + dateString);
             values.add(point);
         }
 
@@ -202,6 +222,7 @@ public class SugarFastingHistoryFragment extends Fragment {
 
         LineChartData data = new LineChartData();
         data.setLines(lines);
+
         lineCHartView.setLineChartData(data);
-    }
+    }*/
 }
