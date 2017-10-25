@@ -21,4 +21,5 @@ public interface Constants {
     String ULTRASOUND_TYPE = "4";
     String TEST_REPORT_TYPE = "5";
     String OTHERS_REPORT_TYPE = "6";
+    String SUGAR_LVL_FASTING_FB = "sugarLevelFasting";
 }

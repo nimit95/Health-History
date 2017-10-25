@@ -36,7 +36,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.model.BloodPressure;
 import com.hackdtu.healthhistory.model.ImagePojo;
+import com.hackdtu.healthhistory.model.SugarLevel;
 import com.hackdtu.healthhistory.network.Jsonparsor;
 import com.hackdtu.healthhistory.utils.Constants;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
@@ -161,10 +163,14 @@ public class UploadActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
+                        ArrayList<SugarLevel> temp1 = new ArrayList<SugarLevel>();
+                        ArrayList<BloodPressure> temp2 = new ArrayList<BloodPressure>();
+
                         String type = getTypeOfImage();
                         Uri url=taskSnapshot.getMetadata().getDownloadUrl();
                         ImagePojo image = new ImagePojo(titleValue,String.valueOf(System.currentTimeMillis()),
-                                url.toString(),descriptionValue,type);
+                                url.toString(),descriptionValue,type,temp1,temp1,temp2
+                                );
 
                         //DatabaseReference databaseReference = mDatabase.child(Constants.USER_IMG_FB).push();
 
