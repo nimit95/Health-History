@@ -7,20 +7,16 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,23 +24,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.dialog.MainActionDialog;
 import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
-import com.hackdtu.healthhistory.model.Diseases;
-import com.hackdtu.healthhistory.model.DrawerHeader;
-import com.hackdtu.healthhistory.model.DrawerMenuItem;
-import com.hackdtu.healthhistory.model.HeadingView;
-import com.hackdtu.healthhistory.model.InfoView;
-import com.hackdtu.healthhistory.model.UserHistory;
-import com.hackdtu.healthhistory.model.UserHistoryList;
-import com.hackdtu.healthhistory.network.NetworkCall;
-import com.hackdtu.healthhistory.network.NetworkCall2;
-import com.hackdtu.healthhistory.utils.Constants;
-import com.hackdtu.healthhistory.utils.SuperPrefs;
+import com.hackdtu.healthhistory.fragment.SugarFastingHistoryFragment;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -56,16 +39,9 @@ import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mindorks.placeholderview.ExpandablePlaceHolderView;
-import com.mindorks.placeholderview.PlaceHolderView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -162,7 +138,11 @@ public class HomeActivity extends AppCompatActivity {
                 /*
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);*/
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
                 MainActionDialog mainActionDialog = new MainActionDialog();
+
                 mainActionDialog.show(getSupportFragmentManager(),"FAB");
             }
         });
@@ -200,7 +180,6 @@ public class HomeActivity extends AppCompatActivity {
                         item2,
                         item3
                 )
-                /*
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -209,17 +188,12 @@ public class HomeActivity extends AppCompatActivity {
                         Fragment fragment = null;
 
                         if(position==1){
-                            Log.e("onItemClick: ", " All Songs");
-                            fragment = new MainFragment();
+                            Log.e("onItemClick: ", " Home Activity Fragment");
+                            fragment = new HomeActivityFragment();
                         }
                         else if(position==2){
-                            Log.e("onItemClick: ", " Favourites");
-                            fragment = new FavouritesFragment();
-                        }
-                        else if(position==3){
-                            Song song = musicSrv.getSong();
-                            fragment = NowPlaying.newInstance(song.getAlbumID(),
-                                    song.getAlbum(),song.getTitle(),song.getId());
+                            Log.e("onItemClick: ", " Sugar Level history");
+                            fragment = new SugarFastingHistoryFragment();
                         }
 
                         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -229,7 +203,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         return false;
                     }
-                })*/
+                })
                 .build();
     }
 

@@ -26,13 +26,6 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     private FButton fbtnCataract,fbtnSkinCancer,fbtnUpload;
     private int REQ_CAMERA_IMAGE=10;
     public static final String TAG = MainActionDialog.class.getSimpleName();
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.setTitle("Add New Contractor");
-        return dialog;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +36,7 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getDialog().setTitle("Add New Contractor");
+        //getDialog().setTitle("Add New Contractor");
 
         View view= inflater.inflate(R.layout.fragment_main_action_dialog, container);
         superPrefs = new SuperPrefs(getActivity());
@@ -79,7 +72,7 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     private void uploadImage() {
         Log.e(TAG, "uploadImage: " );
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, REQ_CAMERA_IMAGE);
+        getActivity().startActivityForResult(intent, REQ_CAMERA_IMAGE);
         this.dismiss();
     }
 

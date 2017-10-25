@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "130551244071-20ib9pitp7843odptmmegpdp7be2k6hh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hackdtu.healthhistory",
+            "certificate_hash": "22af515af9cc8f2c5c56ef4b6ad0528f35eb5b72"
+          }
+        },
+        {
           "client_id": "130551244071-bh8tns6iocdjlnk1lc0h7u88b4vc923d.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
