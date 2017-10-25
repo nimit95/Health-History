@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.model.User;
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNewUser(FirebaseUser firebaseUser) {
         DatabaseReference users = getFirebaseUserReference(firebaseUser);
         Log.d(TAG, "createNewUser: " + firebaseUser.getDisplayName() + users.getKey());
-        User user = new User(firebaseUser.getDisplayName(), users.getKey(), "", "", "");
+        User user = new User(firebaseUser.getDisplayName(), users.getKey(), "", "", "", FirebaseInstanceId.getInstance().getToken());
         users.setValue(user);
         saveUserDetailsToPref(user);
         updateUI(firebaseUser);

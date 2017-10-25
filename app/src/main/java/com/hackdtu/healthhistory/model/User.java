@@ -9,18 +9,21 @@ public class User {
     private String phone;
     private String blood_group;
     private String status;
+    private String firebaseInsstanceId;
     //Status left
 
 
-    public User(){
+    public User() {
 
     }
-    public User(String name, String userID, String phone, String blood_group, String status) {
+
+    public User(String name, String userID, String phone, String blood_group, String status, String firebaseInsstanceId) {
         this.name = name;
         this.userID = userID;
         this.phone = phone;
         this.blood_group = blood_group;
         this.status = status;
+        this.firebaseInsstanceId = firebaseInsstanceId;
     }
 
     public String getName() {
@@ -41,5 +44,9 @@ public class User {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getFirebaseInsstanceId() {
+        return firebaseInsstanceId;
     }
 }
