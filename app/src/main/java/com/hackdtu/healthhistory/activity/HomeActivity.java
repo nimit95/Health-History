@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.dialog.MainActionDialog;
 import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
 import com.hackdtu.healthhistory.model.Diseases;
 import com.hackdtu.healthhistory.model.DrawerHeader;
@@ -158,8 +159,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                /*
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, REQ_CAMERA_IMAGE);
+                startActivityForResult(intent, REQ_CAMERA_IMAGE);*/
+                MainActionDialog mainActionDialog = new MainActionDialog();
+                mainActionDialog.show(getSupportFragmentManager(),"FAB");
             }
         });
         database = FirebaseDatabase.getInstance();
@@ -243,50 +247,4 @@ public class HomeActivity extends AppCompatActivity {
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
-
-    public class ShowList extends AsyncTask<Object, Object, String>{
-
-        @Override
-        protected String doInBackground(Object... objects) {
-            NetworkCall2 networkCall=new NetworkCall2();
-            try {
-                String response=networkCall.run(Constants.DATA_URL);
-                return response;
-            }catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if(s==null)
-            {
-                // Net not present
-                Log.e("onPostExecute: ","no response" );
-            }
-            else
-            {
-                List<UserHistory> userHistoryLists=new ArrayList<>();
-                Gson gson=new GsonBuilder().create();
-                try {
-                    JSONArray jsonArray=new JSONArray(s);
-
-
-                    for(int i=0;i<jsonArray.length();i++)
-                    {
-                        UserHistory object=gson.fromJson(jsonArray.getString(i),UserHistory.class);
-                        userHistoryLists.add(object);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                Log.e("onPostExecute: ",s );
-            }
-
-    }}
 }

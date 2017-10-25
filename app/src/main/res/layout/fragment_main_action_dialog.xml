@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <info.hoang8f.widget.FButton
+        android:layout_width="match_parent"
+        android:text="Detect Cataract"
+        android:id="@+id/fbtn_cataract"
+        android:layout_height="wrap_content" />
+
+    <info.hoang8f.widget.FButton
+        android:layout_width="match_parent"
+        android:text="Detect Skin Cancer"
+        android:id="@+id/fbtn_skincancer"
+        android:layout_height="wrap_content" />
+    <info.hoang8f.widget.FButton
+        android:layout_width="match_parent"
+        android:text="Upload"
+        android:id="@+id/fbtn_upload"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
