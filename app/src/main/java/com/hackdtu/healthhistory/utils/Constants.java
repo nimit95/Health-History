@@ -14,6 +14,7 @@ public interface Constants {
 
     String USER_ID = "user-id";
     String USERS_FB = "users";
+    String DISEASES_FB = "diseases";
     String USER_IMG_FB = "userImages";
     String XRAY_TYPE = "1";
     String MRI_TYPE = "2";
@@ -24,4 +25,6 @@ public interface Constants {
     String SUGAR_LVL_FASTING_FB = "sugarLevelFasting";
     String SUGAR_PP_FASTING_FB ="sugarLevelPP";
     String BLOOD_PRESSURE_FB = "bloodPressures";
+    String DISEASE_LIST_FB = "diseaseList";
+    String PATIENT_COUNT = "numCount";
 }

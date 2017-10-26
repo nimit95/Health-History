@@ -10,9 +10,12 @@ public class ImagePojo {
     private String title, timeStamp, url, description, imgType;
     private ArrayList<SugarLevel> sugarLevelFasting, sugarLevelPP;
     private ArrayList<BloodPressure> bloodPressures;
+    private ArrayList<Disease> diseaseList;
 
+    public ImagePojo() {
+    }
 
-    public ImagePojo(String title, String timeStamp, String url, String description, String imgType, ArrayList<SugarLevel> sugarLevelFasting, ArrayList<SugarLevel> sugarLevelPP, ArrayList<BloodPressure> bloodPressures) {
+    public ImagePojo(String title, String timeStamp, String url, String description, String imgType, ArrayList<SugarLevel> sugarLevelFasting, ArrayList<SugarLevel> sugarLevelPP, ArrayList<BloodPressure> bloodPressures, ArrayList<Disease> diseaseList) {
         this.title = title;
         this.timeStamp = timeStamp;
         this.url = url;
@@ -21,6 +24,7 @@ public class ImagePojo {
         this.sugarLevelFasting = sugarLevelFasting;
         this.sugarLevelPP = sugarLevelPP;
         this.bloodPressures = bloodPressures;
+        this.diseaseList = diseaseList;
     }
 
     public String getTitle() {
@@ -87,7 +91,11 @@ public class ImagePojo {
         this.bloodPressures = bloodPressures;
     }
 
-    public ImagePojo() {
+    public ArrayList<Disease> getDiseaseList() {
+        return diseaseList;
+    }
 
+    public void setDiseaseList(ArrayList<Disease> diseaseList) {
+        this.diseaseList = diseaseList;
     }
 }

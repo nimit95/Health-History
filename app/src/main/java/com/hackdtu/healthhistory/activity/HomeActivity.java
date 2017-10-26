@@ -25,7 +25,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.dialog.AddDiseaseDialogFragment;
 import com.hackdtu.healthhistory.dialog.MainActionDialog;
+import com.hackdtu.healthhistory.fragment.DiseaseListFragment;
 import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
 import com.hackdtu.healthhistory.fragment.SugarFastingHistoryFragment;
 import com.hackdtu.healthhistory.utils.Constants;
@@ -141,10 +143,17 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CAMERA_IMAGE);*/
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_container);
 
-                MainActionDialog mainActionDialog = new MainActionDialog();
+                if(fragment instanceof DiseaseListFragment){
+                    AddDiseaseDialogFragment addDiseaseDialogFragment = new AddDiseaseDialogFragment();
+                    addDiseaseDialogFragment.show(fragmentManager,"Add disease");
+                }
+                else {
+                    MainActionDialog mainActionDialog = new MainActionDialog();
 
-                mainActionDialog.show(getSupportFragmentManager(),"FAB");
+                    mainActionDialog.show(fragmentManager, "FAB");
+                }
             }
         });
         database = FirebaseDatabase.getInstance();
@@ -172,6 +181,8 @@ public class HomeActivity extends AppCompatActivity {
                 //.withIcon(R.drawable.ic_play_arrow_black_36dp);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.blood_pressure_history);
 
+        SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.disease_history);
+
 //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
                 .withActivity(this)
@@ -181,7 +192,8 @@ public class HomeActivity extends AppCompatActivity {
                         item1,
                         item2,
                         item3,
-                        item4
+                        item4,
+                        item5
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -204,7 +216,9 @@ public class HomeActivity extends AppCompatActivity {
                         else if(position == 4){
                             fragment = SugarFastingHistoryFragment.newInstance(Constants.BLOOD_PRESSURE_FB);
                         }
-
+                        else if(position == 5){
+                            fragment = new DiseaseListFragment();
+                        }
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.fl_container, fragment);
