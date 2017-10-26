@@ -28,6 +28,7 @@ import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.dialog.MainActionDialog;
 import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
 import com.hackdtu.healthhistory.fragment.SugarFastingHistoryFragment;
+import com.hackdtu.healthhistory.utils.Constants;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -165,10 +166,11 @@ public class HomeActivity extends AppCompatActivity {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.disease_history);
                 //.withIcon(R.drawable.library_music);
-        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_level_history);
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_fasting_level_history);
                 //.withIcon(R.drawable.music_circle);
-        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.now_playing);
+        SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_pp_level_history);
                 //.withIcon(R.drawable.ic_play_arrow_black_36dp);
+        SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.blood_pressure_history);
 
 //create the drawer and remember the `Drawer` result object
         Drawer result = new DrawerBuilder()
@@ -178,7 +180,8 @@ public class HomeActivity extends AppCompatActivity {
                 .addDrawerItems(
                         item1,
                         item2,
-                        item3
+                        item3,
+                        item4
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
@@ -193,7 +196,13 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         else if(position==2){
                             Log.e("onItemClick: ", " Sugar Level history");
-                            fragment = new SugarFastingHistoryFragment();
+                            fragment = SugarFastingHistoryFragment.newInstance(Constants.SUGAR_LVL_FASTING_FB);
+                        }
+                        else if(position == 3){
+                            fragment = SugarFastingHistoryFragment.newInstance(Constants.SUGAR_PP_FASTING_FB);
+                        }
+                        else if(position == 4){
+                            fragment = SugarFastingHistoryFragment.newInstance(Constants.BLOOD_PRESSURE_FB);
                         }
 
                         FragmentManager fragmentManager = getSupportFragmentManager();

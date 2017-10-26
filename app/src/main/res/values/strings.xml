@@ -3,7 +3,9 @@
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="disease_history">Disease History</string>
-    <string name="sugar_level_history">Sugar Level History</string>
+    <string name="sugar_fasting_level_history">Sugar Fasting Level History</string>
+    <string name="sugar_pp_level_history">Sugar PP Level History</string>
+    <string name="blood_pressure_history">Blood Pressure History</string>
     <string name="now_playing">Additional Notes</string>
 
     <!-- TODO: Remove or change this placeholder text -->

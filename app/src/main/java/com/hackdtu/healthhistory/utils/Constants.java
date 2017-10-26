@@ -22,4 +22,6 @@ public interface Constants {
     String TEST_REPORT_TYPE = "5";
     String OTHERS_REPORT_TYPE = "6";
     String SUGAR_LVL_FASTING_FB = "sugarLevelFasting";
+    String SUGAR_PP_FASTING_FB ="sugarLevelPP";
+    String BLOOD_PRESSURE_FB = "bloodPressures";
 }
