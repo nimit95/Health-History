@@ -16,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.hackdtu.healthhistory.FirebaseReference;
 import com.hackdtu.healthhistory.R;
 import com.hackdtu.healthhistory.dialog.AddDiseaseDialogFragment;
 import com.hackdtu.healthhistory.dialog.MainActionDialog;
@@ -31,6 +36,7 @@ import com.hackdtu.healthhistory.fragment.DiseaseListFragment;
 import com.hackdtu.healthhistory.fragment.HomeActivityFragment;
 import com.hackdtu.healthhistory.fragment.SugarFastingHistoryFragment;
 import com.hackdtu.healthhistory.utils.Constants;
+import com.hackdtu.healthhistory.utils.SuperPrefs;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -58,6 +64,10 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Log.d("Home", "onCreate: "+ FirebaseInstanceId.getInstance().getToken());
+        SuperPrefs superPrefs = new SuperPrefs(this);
+        FirebaseReference.userReference.child(superPrefs.getString("user-id"))
+                .child("firebaseInsstanceId").setValue(FirebaseInstanceId.getInstance().getToken());
         Dexter.withActivity(this)
 
                 .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -244,4 +254,25 @@ public class HomeActivity extends AppCompatActivity {
         int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
         return cursor.getString(idx);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.shareUserId:
+                Intent intent = new Intent(this, ShareUserIdActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
 }
