@@ -1,77 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_upload"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    tools:context="com.hackdtu.healthhistory.activity.UploadActivity">
+    android:layout_height="match_parent">
+
 
     <ImageView
-        android:layout_gravity="center"
-        android:layout_width="200dp"
         android:id="@+id/image_to_be_uploaded"
-        android:scaleType="fitXY"
-        android:layout_height="200dp" />
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+
+        android:scaleType="fitXY" />
 
     <LinearLayout
-        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:background="#11000000"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/colorPrimary">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/photo_title"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="1"
-            android:hint="Title"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textColor="@color/text_color" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_centerInParent="true"
+            android:textColorHint="@color/md_black_1000">
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
-        android:textColorHint="@color/colorPrimary">
+            <EditText
+                android:id="@+id/photo_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:hint="Title"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/md_black_1000" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/photo_description"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="1"
-            android:hint="Description"
-            android:inputType="textMultiLine"
-            android:maxLines="4"
-            android:textColor="@color/text_color" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_centerInParent="true"
+            android:textColorHint="@color/md_black_1000">
 
+            <EditText
+                android:id="@+id/photo_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="1"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:textColor="@color/md_black_1000" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+        <Button
+            android:id="@+id/upload_button"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Upload"
+            android:textColor="@color/white" />
     </LinearLayout>
 
-    <Spinner
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:id="@+id/spinner"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:text="Upload"
-        android:id="@+id/upload_button"
-        android:layout_margin="5dp"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimaryDark"
-        android:layout_alignParentBottom="true"
-        android:layout_height="50dp" />
-</android.support.design.widget.CoordinatorLayout>
+
+</FrameLayout>

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.hackdtu.healthhistory.R;
 
-public class ShareUserId extends AppCompatActivity {
+public class ShareUserIdActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

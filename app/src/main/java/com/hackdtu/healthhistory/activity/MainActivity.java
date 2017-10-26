@@ -1,5 +1,6 @@
 package com.hackdtu.healthhistory.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
     private FirebaseAuth mAuth;
+    private ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
 
         authInitialisation();
 
@@ -87,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                progressStart();
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Existing user");
                 User currUser = dataSnapshot.getValue(User.class);
                 saveUserDetailsToPref(currUser);
+                progressStop();
                 updateUI(firebaseUser);
                 getFirebaseUserReference(firebaseUser).removeEventListener(this);
             }
@@ -170,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         User user = new User(firebaseUser.getDisplayName(), users.getKey(), "", "", "", FirebaseInstanceId.getInstance().getToken());
         users.setValue(user);
         saveUserDetailsToPref(user);
+        progressStop();
         updateUI(firebaseUser);
     }
 
@@ -200,5 +205,17 @@ public class MainActivity extends AppCompatActivity {
         SuperPrefs pref = new SuperPrefs(MainActivity.this);
         pref.setString("user-id", user.getUserID());
         pref.setString("userName", user.getName());
+    }
+
+    void progressStart() {
+        //pb = new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
+        pd = new ProgressDialog(MainActivity.this);
+        pd.setMessage("Logging In Please Wait...");
+        pd.setCancelable(false);
+        pd.show();
+    }
+
+    void progressStop() {
+        pd.dismiss();
     }
 }

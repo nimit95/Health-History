@@ -26,27 +26,26 @@
         <activity
             android:name=".activity.HomeActivity"
             android:theme="@style/NoActionbar" />
-
-        <activity android:name=".activity.UploadActivity" />
+        <activity
+            android:name=".activity.UploadActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".activity.DiseaseListActivity" />
         <activity android:name=".activity.ImageDisplay" />
         <activity android:name=".activity.CheckCataractActivity" />
-        <activity android:name=".activity.ScanResultActivtiy">
+        <activity android:name=".activity.ScanResultActivtiy"></activity>
 
-        </activity>
-        <service
-            android:name=".fcm.MyFirebaseMessagingService">
+        <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".fcm.MyFirebaseInstanceIDService">
+        <service android:name=".fcm.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
+        <activity android:name=".activity.ShareUserIdActivity"></activity>
     </application>
 
 </manifest>
