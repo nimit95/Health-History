@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:weightSum="2"
+    android:orientation="horizontal">
+
+    <TextView
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:hint="Name"
+        android:padding="5dp"
+        android:id="@+id/tv_rv_item_disease_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:hint="Date"
+        android:padding="5dp"
+        android:id="@+id/tv_rv_item_disease_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
