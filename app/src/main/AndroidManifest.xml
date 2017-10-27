@@ -32,7 +32,7 @@
         <activity android:name=".activity.DiseaseListActivity" />
         <activity android:name=".activity.ImageDisplay" />
         <activity android:name=".activity.CheckCataractActivity" />
-        <activity android:name=".activity.ScanResultActivtiy"></activity>
+        <activity android:name=".activity.ScanResultActivtiy" />
 
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -45,7 +45,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activity.ShareUserIdActivity"></activity>
+        <activity android:name=".activity.ShareUserIdActivity" />
+        <activity android:name=".activity.CheckSkinCancerActivity"></activity>
     </application>
 
 </manifest>

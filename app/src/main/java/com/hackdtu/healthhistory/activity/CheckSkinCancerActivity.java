@@ -3,7 +3,6 @@ package com.hackdtu.healthhistory.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,6 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,7 +24,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class CheckCataractActivity extends AppCompatActivity {
+public class CheckSkinCancerActivity extends AppCompatActivity {
 
     String path, name;
     private ProgressDialog pd;
@@ -34,7 +32,7 @@ public class CheckCataractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_check_cataract);
+        setContentView(R.layout.activity_check_skin_cancer);
         progressStart();
         path = getIntent().getStringExtra("path");
         name = getIntent().getStringExtra("name");
@@ -58,17 +56,17 @@ public class CheckCataractActivity extends AppCompatActivity {
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                  //  Log.d("Check cataract", "onResponse: " + response.body().string()) ;
+                    //  Log.d("Check cataract", "onResponse: " + response.body().string()) ;
                     String jsonResult = response.body().string();
                     try {
                         JSONObject js = new JSONObject(jsonResult);
-                        Intent intent = new Intent(CheckCataractActivity.this, ScanResultActivtiy.class);
-                        intent.putExtra("disease",0);
-                        if(js.getInt("points")>100){
-                            intent.putExtra("result", 2);
-                        }
-                        else if(js.getInt("points")<75) {
+                        Intent intent = new Intent(CheckSkinCancerActivity.this, ScanResultActivtiy.class);
+                        intent.putExtra("disease",1);
+                        if(js.getString("points").compareToIgnoreCase("benign")==0){
                             intent.putExtra("result", 0);
+                        }
+                        else if(js.getString("points").compareToIgnoreCase("malignant melanoma")==0) {
+                            intent.putExtra("result", 2);
                         }
                         else {
                             intent.putExtra("result", 1);

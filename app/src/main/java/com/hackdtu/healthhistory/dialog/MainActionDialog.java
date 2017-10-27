@@ -25,6 +25,8 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     private SuperPrefs superPrefs;
     private FButton fbtnCataract,fbtnSkinCancer,fbtnUpload;
     private int REQ_CAMERA_IMAGE=10;
+    private int REQ_CHECK_CATARACT = 100;
+    private int REQ_CHECK_SKIN = 200;
     public static final String TAG = MainActionDialog.class.getSimpleName();
 
     @Override
@@ -78,11 +80,15 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
 
     private void skinCancerDetect() {
         Log.e(TAG, "skinCancerDetect: ");
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(intent, REQ_CHECK_SKIN);
         this.dismiss();
     }
 
     private void cataractDetect() {
         Log.e(TAG, "cataractDetect: " );
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(intent, REQ_CHECK_CATARACT);
         this.dismiss();
     }
 }

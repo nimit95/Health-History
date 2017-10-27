@@ -37,19 +37,29 @@ public class ScanResultActivtiy extends AppCompatActivity {
             }
         });
         int result = getIntent().getIntExtra("result", 1);
+        int disease = getIntent().getIntExtra("disease",0);
 
         if(result==0) {
-            tvResult.setText("No Cataract Detected");
+            if(disease==0)
+                tvResult.setText("No Cataract Detected");
+            else
+                tvResult.setText("benign");
             imageView.setImageResource(R.drawable.fine);
         }
 
         else if(result==1) {
-            tvResult.setText("Mild Cataract Detected");
+            if(disease==0)
+                tvResult.setText("Mild Cataract Detected");
+            else
+                tvResult.setText("Suspicious");
             imageView.setImageResource(R.drawable.seedoctor);
             btnResultAction.setVisibility(View.VISIBLE);
         }
         else {
-            tvResult.setText("Cataract Detected");
+            if(disease==0)
+                tvResult.setText("Cataract Detected");
+            else
+                tvResult.setText("malignant melanoma");
             imageView.setImageResource(R.drawable.seedoctor);
             btnResultAction.setVisibility(View.VISIBLE);
         }

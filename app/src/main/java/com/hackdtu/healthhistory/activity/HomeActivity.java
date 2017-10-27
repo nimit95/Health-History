@@ -55,6 +55,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     private int REQ_CAMERA_IMAGE=10;
+    private int REQ_CHECK_CATARACT = 100;
+    private int REQ_CHECK_SKIN = 200;
     private FloatingActionButton uploadPhoto;
     private Toolbar topToolBar;
     private FirebaseDatabase database;
@@ -127,6 +129,48 @@ public class HomeActivity extends AppCompatActivity {
 
             //System.out.println(mImageCaptureUri);
             Intent intent=new Intent(HomeActivity.this,UploadActivity.class);
+            intent.putExtra("path",tempUri.toString());
+            intent.putExtra("name",finalFile.getName());
+            startActivity(intent);
+
+        }
+        if(resultCode==RESULT_OK && requestCode==REQ_CHECK_CATARACT)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            /*
+            imageView.setImageBitmap(photo);
+            knop.setVisibility(Button.VISIBLE);*/
+
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+
+            //System.out.println(mImageCaptureUri);
+            Intent intent=new Intent(HomeActivity.this,CheckCataractActivity.class);
+            intent.putExtra("path",tempUri.toString());
+            intent.putExtra("name",finalFile.getName());
+            startActivity(intent);
+
+        }
+        if(resultCode==RESULT_OK && requestCode==REQ_CHECK_SKIN)
+        {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            /*
+            imageView.setImageBitmap(photo);
+            knop.setVisibility(Button.VISIBLE);*/
+
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+
+            //System.out.println(mImageCaptureUri);
+            Intent intent=new Intent(HomeActivity.this,CheckSkinCancerActivity.class);
             intent.putExtra("path",tempUri.toString());
             intent.putExtra("name",finalFile.getName());
             startActivity(intent);
@@ -231,7 +275,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.fl_container, fragment);
+                        fragmentTransaction.addToBackStack("1").replace(R.id.fl_container, fragment);
                         fragmentTransaction.commit();
 
                         return false;
