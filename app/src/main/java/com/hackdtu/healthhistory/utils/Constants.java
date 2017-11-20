@@ -27,4 +27,6 @@ public interface Constants {
     String BLOOD_PRESSURE_FB = "bloodPressures";
     String DISEASE_LIST_FB = "diseaseList";
     String PATIENT_COUNT = "numCount";
+    String CANCER_DETECT_URL = "http://b048d33c.ngrok.io/history/checkstring/";
+    String CATARACT_DETECT_URL = "http://b048d33c.ngrok.io/history/checkstring/";
 }

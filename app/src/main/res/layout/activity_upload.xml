@@ -14,7 +14,6 @@
         android:id="@+id/image_to_be_uploaded"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-
         android:scaleType="fitXY" />
 
     <LinearLayout

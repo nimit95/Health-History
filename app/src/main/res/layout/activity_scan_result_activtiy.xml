@@ -18,7 +18,7 @@
             android:id="@+id/imageView"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:src="@drawable/seedoctor" />
+            android:src="@drawable/fine" />
 
         <TextView
             android:id="@+id/tvResult"
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:gravity="center"
-            android:text="Cataract Detected"
+            android:text="No Cataract Detected"
             android:textAppearance="@android:style/TextAppearance.Large"
             android:textStyle="bold" />
 

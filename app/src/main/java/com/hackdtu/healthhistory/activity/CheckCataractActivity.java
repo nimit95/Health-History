@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,8 +47,12 @@ public class CheckCataractActivity extends AppCompatActivity {
 
             OkHttpClient client = new OkHttpClient();
 
+            /*
             Request request = new Request.Builder()
                     .url("http://7a52c212.ngrok.io/history/checkstring/" + imageBase64)
+                    .build();*/
+            Request request = new Request.Builder()
+                    .url(Constants.CATARACT_DETECT_URL + imageBase64)
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
