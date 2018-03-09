@@ -8,6 +8,7 @@
     android:background="@android:color/holo_blue_light"
     tools:context="com.hackdtu.healthhistory.activity.ScanResultActivtiy">
 
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,17 +31,19 @@
             android:textAppearance="@android:style/TextAppearance.Large"
             android:textStyle="bold" />
 
+
         <info.hoang8f.widget.FButton
             android:id="@+id/btnResultAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:visibility="gone"
-            fbutton:buttonColor="@color/fbutton_color_turquoise"
-            fbutton:shadowEnabled="true"
-            fbutton:shadowHeight="5dp"
             android:textColor="@color/white"
-            fbutton:cornerRadius="5dp"
             android:text="  SEARCH FOR DOCTORS  " />
     </LinearLayout>
 </FrameLayout>
+    <!--fbutton:buttonColor="@color/fbutton_color_turquoise"
+                fbutton:shadowEnabled="true"
+                fbutton:shadowHeight="5dp"
+                fbutton:cornerRadius="5dp"
+                -->

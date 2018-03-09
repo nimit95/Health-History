@@ -24,6 +24,7 @@ public class ScanResultActivtiy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_result_activtiy);
 
+
         tvResult = (TextView) findViewById(R.id.tvResult);
         imageView = findViewById(R.id.imageView);
         btnResultAction = (FButton) findViewById(R.id.btnResultAction);
@@ -63,7 +64,5 @@ public class ScanResultActivtiy extends AppCompatActivity {
             imageView.setImageResource(R.drawable.seedoctor);
             btnResultAction.setVisibility(View.VISIBLE);
         }
-
-
     }
 }
