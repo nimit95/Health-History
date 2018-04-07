@@ -16,6 +16,16 @@
         android:layout_height="wrap_content" />
     <info.hoang8f.widget.FButton
         android:layout_width="match_parent"
+        android:text="Detect Lung Cancer"
+        android:id="@+id/fbtnLungCancer"
+        android:layout_height="wrap_content" />
+    <info.hoang8f.widget.FButton
+        android:layout_width="match_parent"
+        android:text="Detect Diabetes"
+        android:id="@+id/fbtnDiabetes"
+        android:layout_height="wrap_content" />
+    <info.hoang8f.widget.FButton
+        android:layout_width="match_parent"
         android:text="Upload"
         android:id="@+id/fbtn_upload"
         android:layout_height="wrap_content" />

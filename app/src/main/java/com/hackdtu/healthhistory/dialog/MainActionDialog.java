@@ -23,7 +23,7 @@ import info.hoang8f.widget.FButton;
 
 public class MainActionDialog extends DialogFragment implements View.OnClickListener{
     private SuperPrefs superPrefs;
-    private FButton fbtnCataract,fbtnSkinCancer,fbtnUpload;
+    private FButton fbtnCataract, fbtnSkinCancer, fbtnLungCancer, fbtnDiabetes, fbtnUpload;
     private int REQ_CAMERA_IMAGE=10;
     private int REQ_CHECK_CATARACT = 100;
     private int REQ_CHECK_SKIN = 200;
@@ -51,6 +51,8 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
         fbtnCataract = (FButton) view.findViewById(R.id.fbtn_cataract);
         fbtnSkinCancer = (FButton) view.findViewById(R.id.fbtn_skincancer);
         fbtnUpload = (FButton) view.findViewById(R.id.fbtn_upload);
+        fbtnDiabetes = view.findViewById(R.id.fbtnDiabetes);
+        fbtnLungCancer = view.findViewById(R.id.fbtnLungCancer);
         fbtnCataract.setOnClickListener(this);
         fbtnSkinCancer.setOnClickListener(this);
         fbtnUpload.setOnClickListener(this);
