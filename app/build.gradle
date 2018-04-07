@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.2"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.hackdtu.healthhistory"
         minSdkVersion 16
@@ -46,17 +46,17 @@ dependencies {
     compile "com.android.support:support-v4:$support_lib_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "com.google.firebase:firebase-messaging:$firebase_version"
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'net.gotev:uploadservice:3.1'
     compile 'net.gotev:uploadservice-okhttp:3.1'
     compile 'info.hoang8f:fbutton:1.0.5'
     compile 'com.karumi:dexter:3.0.1'
-    compile 'com.mindorks:placeholderview:0.2.7'
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.mindorks:placeholderview:0.7.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.github.lecho:hellocharts-android:v1.5.8'
