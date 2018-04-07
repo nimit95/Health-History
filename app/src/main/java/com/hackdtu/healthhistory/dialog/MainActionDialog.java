@@ -27,6 +27,10 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     private int REQ_CAMERA_IMAGE=10;
     private int REQ_CHECK_CATARACT = 100;
     private int REQ_CHECK_SKIN = 200;
+
+    private int REQ_CHECK_LUNG = 300;
+    private int REQ_CHECK_DIABETES = 400;
+
     public static final String TAG = MainActionDialog.class.getSimpleName();
 
     @Override
@@ -56,6 +60,8 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
         fbtnCataract.setOnClickListener(this);
         fbtnSkinCancer.setOnClickListener(this);
         fbtnUpload.setOnClickListener(this);
+        fbtnDiabetes.setOnClickListener(this);
+        fbtnLungCancer.setOnClickListener(this);
     }
 
     @Override
@@ -67,9 +73,16 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
             case R.id.fbtn_skincancer:
                 skinCancerDetect();
                 break;
+            case R.id.fbtnDiabetes:
+                diabetesDetect();
+                break;
+            case R.id.fbtnLungCancer:
+                lungCancerDetect();
+                break;
             case R.id.fbtn_upload:
                 uploadImage();
                 break;
+
         }
     }
 
@@ -93,4 +106,18 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
         getActivity().startActivityForResult(intent, REQ_CHECK_CATARACT);
         this.dismiss();
     }
+    private void lungCancerDetect() {
+        Log.e(TAG, "cataractDetect: " );
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(intent, REQ_CHECK_LUNG);
+        this.dismiss();
+    }
+
+    private void diabetesDetect() {
+        Log.e(TAG, "cataractDetect: " );
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(intent, REQ_CHECK_DIABETES);
+        this.dismiss();
+    }
+
 }

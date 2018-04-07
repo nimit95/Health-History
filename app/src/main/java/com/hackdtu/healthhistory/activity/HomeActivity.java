@@ -54,9 +54,12 @@ import java.io.File;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    private int REQ_CAMERA_IMAGE=10;
+    private int REQ_CAMERA_IMAGE = 10;
     private int REQ_CHECK_CATARACT = 100;
     private int REQ_CHECK_SKIN = 200;
+    private int REQ_CHECK_LUNG = 300;
+    private int REQ_CHECK_DIABETES = 400;
+
     private FloatingActionButton uploadPhoto;
     private Toolbar topToolBar;
     private FirebaseDatabase database;
@@ -66,7 +69,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Log.d("Home", "onCreate: "+ FirebaseInstanceId.getInstance().getToken());
+        Log.d("Home", "onCreate: " + FirebaseInstanceId.getInstance().getToken());
         SuperPrefs superPrefs = new SuperPrefs(this);
         FirebaseReference.userReference.child(superPrefs.getString("user-id"))
                 .child("firebaseInsstanceId").setValue(FirebaseInstanceId.getInstance().getToken());
@@ -113,8 +116,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode==RESULT_OK && requestCode==REQ_CAMERA_IMAGE)
-        {
+        if (resultCode == RESULT_OK && requestCode == REQ_CAMERA_IMAGE) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             /*
             imageView.setImageBitmap(photo);
@@ -128,14 +130,13 @@ public class HomeActivity extends AppCompatActivity {
             File finalFile = new File(getRealPathFromURI(tempUri));
 
             //System.out.println(mImageCaptureUri);
-            Intent intent=new Intent(HomeActivity.this,UploadActivity.class);
-            intent.putExtra("path",tempUri.toString());
-            intent.putExtra("name",finalFile.getName());
+            Intent intent = new Intent(HomeActivity.this, UploadActivity.class);
+            intent.putExtra("path", tempUri.toString());
+            intent.putExtra("name", finalFile.getName());
             startActivity(intent);
 
         }
-        if(resultCode==RESULT_OK && requestCode==REQ_CHECK_CATARACT)
-        {
+        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_CATARACT) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             /*
             imageView.setImageBitmap(photo);
@@ -149,14 +150,13 @@ public class HomeActivity extends AppCompatActivity {
             File finalFile = new File(getRealPathFromURI(tempUri));
 
             //System.out.println(mImageCaptureUri);
-            Intent intent=new Intent(HomeActivity.this,CheckCataractActivity.class);
-            intent.putExtra("path",tempUri.toString());
-            intent.putExtra("name",finalFile.getName());
+            Intent intent = new Intent(HomeActivity.this, CheckCataractActivity.class);
+            intent.putExtra("path", tempUri.toString());
+            intent.putExtra("name", finalFile.getName());
             startActivity(intent);
 
         }
-        if(resultCode==RESULT_OK && requestCode==REQ_CHECK_SKIN)
-        {
+        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_SKIN) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             /*
             imageView.setImageBitmap(photo);
@@ -170,24 +170,65 @@ public class HomeActivity extends AppCompatActivity {
             File finalFile = new File(getRealPathFromURI(tempUri));
 
             //System.out.println(mImageCaptureUri);
-            Intent intent=new Intent(HomeActivity.this,CheckSkinCancerActivity.class);
-            intent.putExtra("path",tempUri.toString());
-            intent.putExtra("name",finalFile.getName());
+            Intent intent = new Intent(HomeActivity.this, CheckSkinCancerActivity.class);
+            intent.putExtra("path", tempUri.toString());
+            intent.putExtra("name", finalFile.getName());
             startActivity(intent);
 
         }
+        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_LUNG) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            /*
+            imageView.setImageBitmap(photo);
+            knop.setVisibility(Button.VISIBLE);*/
+
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+
+            //System.out.println(mImageCaptureUri);
+            Intent intent = new Intent(HomeActivity.this, CheckSkinCancerActivity.class);
+            intent.putExtra("path", tempUri.toString());
+            intent.putExtra("name", finalFile.getName());
+            startActivity(intent);
+
+        }
+        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_DIABETES) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            /*
+            imageView.setImageBitmap(photo);
+            knop.setVisibility(Button.VISIBLE);*/
+
+
+            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            // CALL THIS METHOD TO GET THE ACTUAL PATH
+            File finalFile = new File(getRealPathFromURI(tempUri));
+
+            //System.out.println(mImageCaptureUri);
+            Intent intent = new Intent(HomeActivity.this, CheckSkinCancerActivity.class);
+            intent.putExtra("path", tempUri.toString());
+            intent.putExtra("name", finalFile.getName());
+            startActivity(intent);
+
+        }
+
     }
 
     private void attachFragment() {
         Fragment fragment = new HomeActivityFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fl_container,fragment);
+        transaction.add(R.id.fl_container, fragment);
         transaction.commit();
     }
 
     private void initializeView() {
-        uploadPhoto=(FloatingActionButton)findViewById(R.id.upload_photo);
+        uploadPhoto = (FloatingActionButton) findViewById(R.id.upload_photo);
         uploadPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -199,11 +240,10 @@ public class HomeActivity extends AppCompatActivity {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_container);
 
-                if(fragment instanceof DiseaseListFragment){
+                if (fragment instanceof DiseaseListFragment) {
                     AddDiseaseDialogFragment addDiseaseDialogFragment = new AddDiseaseDialogFragment();
-                    addDiseaseDialogFragment.show(fragmentManager,"Add disease");
-                }
-                else {
+                    addDiseaseDialogFragment.show(fragmentManager, "Add disease");
+                } else {
                     MainActionDialog mainActionDialog = new MainActionDialog();
 
                     mainActionDialog.show(fragmentManager, "FAB");
@@ -220,7 +260,7 @@ public class HomeActivity extends AppCompatActivity {
         topToolBar.setTitleTextColor(Color.WHITE);
     }
 
-    private void setupDrawer(){
+    private void setupDrawer() {
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -228,11 +268,11 @@ public class HomeActivity extends AppCompatActivity {
 
         //if you want to update the items at a later time it is recommended to keep it in a variable
         SecondaryDrawerItem item1 = new SecondaryDrawerItem().withIdentifier(1).withName(R.string.disease_history);
-                //.withIcon(R.drawable.library_music);
+        //.withIcon(R.drawable.library_music);
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_fasting_level_history);
-                //.withIcon(R.drawable.music_circle);
+        //.withIcon(R.drawable.music_circle);
         SecondaryDrawerItem item3 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.sugar_pp_level_history);
-                //.withIcon(R.drawable.ic_play_arrow_black_36dp);
+        //.withIcon(R.drawable.ic_play_arrow_black_36dp);
         SecondaryDrawerItem item4 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.blood_pressure_history);
 
         SecondaryDrawerItem item5 = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.disease_history);
@@ -256,21 +296,17 @@ public class HomeActivity extends AppCompatActivity {
 
                         Fragment fragment = null;
 
-                        if(position==1){
+                        if (position == 1) {
                             Log.e("onItemClick: ", " Home Activity Fragment");
                             fragment = new HomeActivityFragment();
-                        }
-                        else if(position==2){
+                        } else if (position == 2) {
                             Log.e("onItemClick: ", " Sugar Level history");
                             fragment = SugarFastingHistoryFragment.newInstance(Constants.SUGAR_LVL_FASTING_FB);
-                        }
-                        else if(position == 3){
+                        } else if (position == 3) {
                             fragment = SugarFastingHistoryFragment.newInstance(Constants.SUGAR_PP_FASTING_FB);
-                        }
-                        else if(position == 4){
+                        } else if (position == 4) {
                             fragment = SugarFastingHistoryFragment.newInstance(Constants.BLOOD_PRESSURE_FB);
-                        }
-                        else if(position == 5){
+                        } else if (position == 5) {
                             fragment = new DiseaseListFragment();
                         }
                         FragmentManager fragmentManager = getSupportFragmentManager();

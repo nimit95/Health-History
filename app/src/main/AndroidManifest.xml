@@ -46,7 +46,9 @@
         </service>
 
         <activity android:name=".activity.ShareUserIdActivity" />
-        <activity android:name=".activity.CheckSkinCancerActivity"></activity>
+        <activity android:name=".activity.CheckSkinCancerActivity" />
+        <activity android:name=".activity.CheckLungCancerActivity" />
+        <activity android:name=".activity.CheckDiabetesActivity"></activity>
     </application>
 
 </manifest>
