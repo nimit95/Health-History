@@ -43,6 +43,8 @@ public class ScanResultActivtiy extends AppCompatActivity {
         if(result==0) {
             if(disease==0)
                 tvResult.setText("No Cataract Detected");
+            else if(disease == 2)
+                tvResult.setText("No Diabetes detected");
             else
                 tvResult.setText("benign");
             imageView.setImageResource(R.drawable.fine);
@@ -51,6 +53,8 @@ public class ScanResultActivtiy extends AppCompatActivity {
         else if(result==1) {
             if(disease==0)
                 tvResult.setText("Mild Cataract Detected");
+            else if(disease == 2)
+                tvResult.setText("Diabetes detected");
             else
                 tvResult.setText("Suspicious");
             imageView.setImageResource(R.drawable.seedoctor);

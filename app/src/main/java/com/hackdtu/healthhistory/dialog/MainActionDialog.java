@@ -117,6 +117,7 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
     private void diabetesDetect() {
         Log.e(TAG, "cataractDetect: " );
         Intent intent = new Intent(getActivity(), CheckDiabetesActivity.class);
+        getActivity().startActivityForResult(intent,REQ_CHECK_DIABETES);
         this.dismiss();
     }
 

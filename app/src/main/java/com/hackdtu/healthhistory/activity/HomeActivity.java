@@ -58,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
     private int REQ_CHECK_CATARACT = 100;
     private int REQ_CHECK_SKIN = 200;
     private int REQ_CHECK_LUNG = 300;
+    private int REQ_CHECK_DIABETES = 400;
 
     private FloatingActionButton uploadPhoto;
     private Toolbar topToolBar;
@@ -196,6 +197,10 @@ public class HomeActivity extends AppCompatActivity {
 
         }
 
+        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_DIABETES) {
+            Intent intent = new Intent(HomeActivity.this,CheckDiabetesActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void attachFragment() {
