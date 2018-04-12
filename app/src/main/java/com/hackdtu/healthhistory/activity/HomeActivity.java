@@ -58,7 +58,6 @@ public class HomeActivity extends AppCompatActivity {
     private int REQ_CHECK_CATARACT = 100;
     private int REQ_CHECK_SKIN = 200;
     private int REQ_CHECK_LUNG = 300;
-    private int REQ_CHECK_DIABETES = 400;
 
     private FloatingActionButton uploadPhoto;
     private Toolbar topToolBar;
@@ -177,26 +176,6 @@ public class HomeActivity extends AppCompatActivity {
 
         }
         if (resultCode == RESULT_OK && requestCode == REQ_CHECK_LUNG) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            /*
-            imageView.setImageBitmap(photo);
-            knop.setVisibility(Button.VISIBLE);*/
-
-
-            // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
-            Uri tempUri = getImageUri(getApplicationContext(), photo);
-
-            // CALL THIS METHOD TO GET THE ACTUAL PATH
-            File finalFile = new File(getRealPathFromURI(tempUri));
-
-            //System.out.println(mImageCaptureUri);
-            Intent intent = new Intent(HomeActivity.this, CheckSkinCancerActivity.class);
-            intent.putExtra("path", tempUri.toString());
-            intent.putExtra("name", finalFile.getName());
-            startActivity(intent);
-
-        }
-        if (resultCode == RESULT_OK && requestCode == REQ_CHECK_DIABETES) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             /*
             imageView.setImageBitmap(photo);

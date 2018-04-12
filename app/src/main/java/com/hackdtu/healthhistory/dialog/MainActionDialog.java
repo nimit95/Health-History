@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.hackdtu.healthhistory.R;
+import com.hackdtu.healthhistory.activity.CheckDiabetesActivity;
 import com.hackdtu.healthhistory.utils.SuperPrefs;
 
 import info.hoang8f.widget.FButton;
@@ -115,8 +116,7 @@ public class MainActionDialog extends DialogFragment implements View.OnClickList
 
     private void diabetesDetect() {
         Log.e(TAG, "cataractDetect: " );
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        getActivity().startActivityForResult(intent, REQ_CHECK_DIABETES);
+        Intent intent = new Intent(getActivity(), CheckDiabetesActivity.class);
         this.dismiss();
     }
 
