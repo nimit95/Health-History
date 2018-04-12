@@ -14,7 +14,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/etBp"
+            android:id="@+id/et_Bp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"
@@ -31,7 +31,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/insulinLevel"
+            android:id="@+id/et_insulinLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"
@@ -48,7 +48,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/glucoseLevel"
+            android:id="@+id/et_glucoseLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"
@@ -65,7 +65,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/age"
+            android:id="@+id/et_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"
@@ -82,7 +82,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/weight"
+            android:id="@+id/et_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"
@@ -99,7 +99,7 @@
         android:textColorHint="@color/md_black_1000">
 
         <EditText
-            android:id="@+id/height"
+            android:id="@+id/et_height"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="1"

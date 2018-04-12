@@ -28,7 +28,9 @@ public interface Constants {
     String DISEASE_LIST_FB = "diseaseList";
     String PATIENT_COUNT = "numCount";
     String CANCER_DETECT_URL = //"http://b048d33c.ngrok.io/history/checkstring/";
-    "http://6168a392.ngrok.io/history/checkstring/";
+    "http://6168a392.ngrok.io/history/checkskin/";
     String CATARACT_DETECT_URL = //"http://b048d33c.ngrok.io/history/checkstring/";
             "http://6168a392.ngrok.io/history/checkstring/";
+
+    String DIABETES_DETECT_URL = "http://09767e90.ngrok.io/history/checkdiabities/";
 }
